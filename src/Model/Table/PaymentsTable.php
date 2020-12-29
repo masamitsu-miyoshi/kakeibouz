@@ -1,0 +1,126 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Payments Model
+ *
+ * @property \App\Model\Table\PaymentMethodsTable&\Cake\ORM\Association\BelongsTo $PaymentMethods
+ * @property \App\Model\Table\CostCategoriesTable&\Cake\ORM\Association\BelongsTo $CostCategories
+ * @property \App\Model\Table\StoresTable&\Cake\ORM\Association\BelongsTo $Stores
+ * @property \App\Model\Table\PayersTable&\Cake\ORM\Association\BelongsTo $Payers
+ *
+ * @method \App\Model\Entity\Payment newEmptyEntity()
+ * @method \App\Model\Entity\Payment newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Payment[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Payment get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Payment findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Payment patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Payment[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Payment|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Payment saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Payment[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Payment[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Payment[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Payment[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class PaymentsTable extends Table
+{
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config): void
+    {
+        parent::initialize($config);
+
+        $this->setTable('payments');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('PaymentMethods', [
+            'foreignKey' => 'payment_method_id',
+        ]);
+        $this->belongsTo('CostCategories', [
+            'foreignKey' => 'cost_category_id',
+        ]);
+        $this->belongsTo('Stores', [
+            'foreignKey' => 'store_id',
+        ]);
+        $this->belongsTo('Payers', [
+            'foreignKey' => 'payer_id',
+        ]);
+        $this->belongsTo('ReceiptImages');
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator): Validator
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->allowEmptyFile('receipt_file');
+
+        $validator
+            ->requirePresence('payer_id');
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->existsIn(['payer_id'], 'Payers'));
+
+        // タイトルにテストという文字を許可しない
+        $rules->addUpdate(function ($entity, $options) {
+            if (empty($entity->getOriginal('cutoff_date'))) {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'cutoff_date', [
+            'errorField' => 'cutoff_date',
+            'message' => '締めたレコードの更新禁止'
+        ]);
+
+        // タイトルにテストという文字を許可しない
+        $rules->addDelete(function ($entity, $options) {
+            if (empty($entity->cutoff_date)) {
+                return true;
+            } else {
+                return false;
+            }
+        }, 'cutoff_date', [
+            'errorField' => 'cutoff_date',
+            'message' => '締めたレコードの更新禁止'
+        ]);
+
+        return $rules;
+    }
+}
