@@ -64,4 +64,17 @@ return [
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
+
+    'Cache' => [
+        'redis' => [
+            'url' => env('REDIS_URL', null),
+        ],
+    ],
+
+    'Session' => [
+        'defaults' => 'cache',
+        'handler' => [
+            'config' => 'redis'
+        ],
+    ],
 ];
