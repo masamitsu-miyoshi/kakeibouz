@@ -40,10 +40,11 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 <body>
     <nav class="top-nav">
         <div class="top-nav-title">
-            <a href="/acbook/payments"><span>今月の家計</span>簿</a>
+            <a href="/payments"><span>今月の家計</span>簿</a>
         </div>
         <div class="top-nav-links">
-            <a target="_blank" href="https://book.cakephp.org/4/">管理画面</a>
+            <?= $loginUsername ?>
+            <?= $loginUsername ? $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) : null ?>
         </div>
     </nav>
     <main class="main">

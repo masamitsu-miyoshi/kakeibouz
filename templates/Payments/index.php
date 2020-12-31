@@ -30,7 +30,6 @@
                     <th>🏬<span class="label"><?= __('支払先') ?></span></th>
                     <th>👥<span class="label"><?= __('立替人') ?></span></th>
                     <th>💰<span class="label"><?= __('金額') ?></span></th>
-                    <th>🧾<span class="label"><?= __('レシート') ?></span></th>
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
@@ -44,7 +43,6 @@
                     <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
                     <td><?= h($payers[$payment->payer_id] ?? '-') ?></td>
                     <td><?= $this->Number->format($payment->amount - $payment->private_amount) ?></td>
-                    <td><?= $payment->receipt_image_id ? $this->Html->link('あり', ['action' => 'view', $payment->id, '?' => ['action' => 'view', $payment->id]]) : '-' ?></td>
                     <td class="actions"><?php
                         if (empty($payment->cutoff_date)) {
                             echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
