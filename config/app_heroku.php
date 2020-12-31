@@ -17,6 +17,10 @@ return [
      */
     'debug' => false,
 
+    'App' => [
+        'fullBaseUrl' => 'https://kakeibouz.herokuapp.com',
+    ],
+
     /*
      * Security and encryption configuration
      *
