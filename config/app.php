@@ -6,6 +6,8 @@ use Cake\Database\Driver\Mysql;
 use Cake\Error\ExceptionRenderer;
 use Cake\Log\Engine\FileLog;
 use Cake\Mailer\Transport\MailTransport;
+use Cake\Console\ConsoleOutput;
+use Cake\Log\Engine\ConsoleLog;
 
 return [
     /*
@@ -331,26 +333,26 @@ return [
      */
     'Log' => [
         'debug' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'debug',
+            'className' => ConsoleLog::class,
+            'stream' => 'php://stdout',
+            'outputAs' => ConsoleOutput::PLAIN,
             'url' => env('LOG_DEBUG_URL', null),
             'scopes' => false,
             'levels' => ['notice', 'info', 'debug'],
         ],
         'error' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'error',
+            'className' => ConsoleLog::class,
+            'stream' => 'php://stderr',
+            'outputAs' => ConsoleOutput::PLAIN,
             'url' => env('LOG_ERROR_URL', null),
             'scopes' => false,
             'levels' => ['warning', 'error', 'critical', 'alert', 'emergency'],
         ],
         // To enable this dedicated query log, you need set your datasource's log flag to true
         'queries' => [
-            'className' => FileLog::class,
-            'path' => LOGS,
-            'file' => 'queries',
+            'className' => ConsoleLog::class,
+            'stream' => 'php://stdout',
+            'outputAs' => ConsoleOutput::PLAIN,
             'url' => env('LOG_QUERIES_URL', null),
             'scopes' => ['queriesLog'],
         ],
