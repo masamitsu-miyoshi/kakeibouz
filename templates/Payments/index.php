@@ -41,7 +41,7 @@
                     <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                     <td><?= h($payment->product_name) ?? '-' ?></td>
                     <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
-                    <td><?= h($payers[$payment->payer_id] ?? '-') ?></td>
+                    <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
                     <td><?= $this->Number->format($payment->amount - $payment->private_amount) ?></td>
                     <td class="actions"><?php
                         if (empty($payment->settlement_id)) {

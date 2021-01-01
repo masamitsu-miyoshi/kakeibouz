@@ -37,7 +37,7 @@ class PaymentsController extends AppController
         foreach (['Users', 'PaymentMethods', 'CostCategories', 'Stores'] as $modelName) {
             $this->loadModel($modelName);
             $this->$modelName->find();
-            $data = $this->$modelName->find('list')->toArray();
+            $data = $this->$modelName->find('list')->order(['id'])->toArray();
             $this->set(Inflector::variable($modelName), $data);
         }
     }
@@ -122,6 +122,7 @@ class PaymentsController extends AppController
         if ($id == null) {
             $payment = $this->Payments->newEntity([
                 'date' => FrozenTime::now('Asia/Tokyo'),
+                'paid_user_id' => $this->request->getSession()->read('Auth.id'),
             ]);
         } else {
             $payment = $this->Payments->get($id, [
@@ -143,10 +144,6 @@ class PaymentsController extends AppController
         }
         $this->set(compact('ref'));
         $this->set(compact('payment'));
-
-        $paidUsers = $this->Users->find('list', ['order' => 'id']);
-
-        $this->set(compact('paidUsers'));
     }
 
     public function duplicate($id = null)
