@@ -17,7 +17,7 @@
             <fieldset>
                 <legend><?= __('Create Settlement') ?></legend>
                 <?php
-                    echo $this->Form->control('code', ['placeholder' => _('yyyyMM')]);
+                    echo $this->Form->control('code', ['placeholder' => __('yyyyMM')]);
                 ?>
             </fieldset>
             <?= $this->Form->button(__('Submit')) ?>
