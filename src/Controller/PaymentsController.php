@@ -134,14 +134,6 @@ class PaymentsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $payment = $this->Payments->patchEntity($payment, $this->request->getData());
 
-            $data = $this->request->getData('_receipt_image');
-            if ($data && $data->getSize()) {
-                $payment->receipt_image = $this->Payments->ReceiptImages->newEmptyEntity();
-                $payment->receipt_image->name = $data->getClientFilename();
-                $payment->receipt_image->media_type = $data->getClientMediaType();
-                $payment->receipt_image->data = $data->getStream()->getContents();
-            }
-
             if ($this->Payments->save($payment)) {
                 $this->Flash->success(__('保存に成功しました 伝票:{0} 金額:{1}', 'P' . $payment->id, $payment->amount - $payment->private_amount));
                 return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
@@ -150,26 +142,6 @@ class PaymentsController extends AppController
         }
         $this->set(compact('ref'));
         $this->set(compact('payment'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id File id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $query = $this->Payments->find();
-        $query
-            ->contain('ReceiptImages')
-            ->where([
-                'Payments.id' => $id,
-            ]);
-
-        $payment = $query->firstOrFail();
-        $this->set('receiptImage', $payment->receipt_image);
     }
 
     public function duplicate($id = null)
@@ -201,9 +173,10 @@ class PaymentsController extends AppController
         $payment = $this->Payments->get($id);
         if ($this->Payments->delete($payment)) {
             $this->Flash->success(__('The payment has been deleted.'));
+            return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
         } else {
             $this->Flash->error(__('The payment could not be deleted. Please, try again.'));
+            return $this->redirect($this->referer());
         }
-        return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
     }
 }

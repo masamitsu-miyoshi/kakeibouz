@@ -44,7 +44,7 @@
                     <td><?= h($payers[$payment->payer_id] ?? '-') ?></td>
                     <td><?= $this->Number->format($payment->amount - $payment->private_amount) ?></td>
                     <td class="actions"><?php
-                        if (empty($payment->cutoff_date)) {
+                        if (empty($payment->settlement_id)) {
                             echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
                         } else {
                             echo 'P' . $payment->id . ' ✅';

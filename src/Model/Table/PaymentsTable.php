@@ -62,7 +62,6 @@ class PaymentsTable extends Table
         $this->belongsTo('Payers', [
             'foreignKey' => 'payer_id',
         ]);
-        $this->belongsTo('ReceiptImages');
     }
 
     /**
@@ -76,9 +75,6 @@ class PaymentsTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
-
-        $validator
-            ->allowEmptyFile('receipt_file');
 
         $validator
             ->requirePresence('payer_id');
@@ -97,27 +93,25 @@ class PaymentsTable extends Table
     {
         $rules->add($rules->existsIn(['payer_id'], 'Payers'));
 
-        // タイトルにテストという文字を許可しない
         $rules->addUpdate(function ($entity, $options) {
-            if (empty($entity->getOriginal('cutoff_date'))) {
+            if (empty($entity->getOriginal('settlement_id'))) {
                 return true;
             } else {
                 return false;
             }
-        }, 'cutoff_date', [
-            'errorField' => 'cutoff_date',
+        }, 'settlement_id', [
+            'errorField' => 'settlement_id',
             'message' => '締めたレコードの更新禁止'
         ]);
 
-        // タイトルにテストという文字を許可しない
         $rules->addDelete(function ($entity, $options) {
-            if (empty($entity->cutoff_date)) {
+            if (empty($entity->settlement_id)) {
                 return true;
             } else {
                 return false;
             }
-        }, 'cutoff_date', [
-            'errorField' => 'cutoff_date',
+        }, 'settlement_id', [
+            'errorField' => 'settlement_id',
             'message' => '締めたレコードの更新禁止'
         ]);
 
