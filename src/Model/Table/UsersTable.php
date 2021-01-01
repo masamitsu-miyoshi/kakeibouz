@@ -38,6 +38,7 @@ class UsersTable extends Table
     public function initialize(array $config): void
     {
         parent::initialize($config);
+        $this->setDisplayField('code');
         $this->addBehavior('Timestamp');
     }
 

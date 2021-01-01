@@ -43,7 +43,7 @@ class Payment extends Entity
         'cost_category_id' => true,
         'product_name' => true,
         'store_id' => true,
-        'payer_id' => true,
+        'paid_user_id' => true,
         'amount' => true,
         'private_amount' => true,
         'receipt_file' => true,

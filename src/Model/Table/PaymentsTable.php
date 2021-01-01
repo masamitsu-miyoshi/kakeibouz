@@ -59,8 +59,10 @@ class PaymentsTable extends Table
         $this->belongsTo('Stores', [
             'foreignKey' => 'store_id',
         ]);
-        $this->belongsTo('Payers', [
-            'foreignKey' => 'payer_id',
+        $this->belongsTo('PaidUsers', [
+            'className' => 'Users',
+            'foreignKey' => 'paid_user_id',
+            'propertyName' => 'paid_user',
         ]);
     }
 
@@ -77,7 +79,7 @@ class PaymentsTable extends Table
             ->allowEmptyString('id', null, 'create');
 
         $validator
-            ->requirePresence('payer_id');
+            ->requirePresence('paid_user_id');
 
         return $validator;
     }
@@ -91,7 +93,7 @@ class PaymentsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['payer_id'], 'Payers'));
+        $rules->add($rules->existsIn('paid_user_id', 'PaidUsers'));
 
         $rules->addUpdate(function ($entity, $options) {
             if (empty($entity->getOriginal('settlement_id'))) {

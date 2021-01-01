@@ -42,10 +42,6 @@ class StoresTable extends Table
         $this->setTable('stores');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
-        $this->hasMany('Payments', [
-            'foreignKey' => 'store_id',
-        ]);
     }
 
     /**

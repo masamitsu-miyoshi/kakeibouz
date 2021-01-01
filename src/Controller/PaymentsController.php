@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Table\PayersTable;
+use App\Model\Table\UsersTable;
 use Cake\Event\EventInterface;
 use Cake\I18n\FrozenTime;
 use Cake\Utility\Inflector;
@@ -11,7 +11,7 @@ use Cake\Utility\Inflector;
 /**
  * Payments Controller
  *
- * @property PayersTable $Payers
+ * @property UsersTable $Users
  * @property \App\Model\Table\PaymentsTable $Payments
  *
  * @method \App\Model\Entity\Payment[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
@@ -34,7 +34,7 @@ class PaymentsController extends AppController
     {
         parent::beforeFilter($event);
 
-        foreach (['Payers', 'PaymentMethods', 'CostCategories', 'Stores'] as $modelName) {
+        foreach (['Users', 'PaymentMethods', 'CostCategories', 'Stores'] as $modelName) {
             $this->loadModel($modelName);
             $this->$modelName->find();
             $data = $this->$modelName->find('list')->toArray();
@@ -70,8 +70,8 @@ class PaymentsController extends AppController
             ]
         ]);
 
-        if ($this->request->getQuery('payer_id')) {
-            $query->where(['Payments.payer_id' =>  $this->request->getQuery('payer_id')]);
+        if ($this->request->getQuery('paid_user_id')) {
+            $query->where(['Payments.paid_user_id' =>  $this->request->getQuery('paid_user_id')]);
         }
 
         $query->order(['date desc', 'id desc']);
@@ -79,14 +79,14 @@ class PaymentsController extends AppController
         $payments = $query->all();
 
         // ユーザー毎の支払金額
-        $query = $this->Payers->find();
+        $query = $this->Payments->find();
         $query
             ->select([
-                'payer_id' => 'Payers.id',
-                'payer_name' => 'Payers.name',
+                'payer_id' => 'Payments.paid_user_id',
+                'payer_name' => 'PaidUsers.code',
                 'payment_amount' => 'SUM(Payments.amount - Payments.private_amount)',
             ])
-            ->leftJoinWith('Payments')
+            ->leftJoinWith('PaidUsers')
             ->where([
                 'OR' => [
                     [
@@ -99,7 +99,7 @@ class PaymentsController extends AppController
                 ]
             ])
             ->group([
-                'Payers.id
+                'Payments.paid_user_id
             ']);
 
         // ユーザー毎の請求金額
@@ -138,10 +138,15 @@ class PaymentsController extends AppController
                 $this->Flash->success(__('保存に成功しました 伝票:{0} 金額:{1}', 'P' . $payment->id, $payment->amount - $payment->private_amount));
                 return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
             }
+
             $this->Flash->error(__('The payment could not be saved. Please, try again.'));
         }
         $this->set(compact('ref'));
         $this->set(compact('payment'));
+
+        $paidUsers = $this->Users->find('list', ['order' => 'id']);
+
+        $this->set(compact('paidUsers'));
     }
 
     public function duplicate($id = null)

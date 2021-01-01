@@ -44,6 +44,8 @@ $cakeDescription = 'Kakeibouz';
         </div>
         <?php if ($loginUsername): ?>
         <div class="top-nav-links">
+            <?= $this->Html->link(__('カテゴリ'), ['controller'=> 'cost_categories', 'action' => 'index']) ?>
+            <?= $this->Html->link(__('支払先'), ['controller'=> 'stores', 'action' => 'index']) ?>
             <?= $this->Html->link(__('締め処理'), ['controller'=> 'settlements', 'action' => 'index']) ?>
             <?= $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) ?>
             <?= $loginUsername ?>
