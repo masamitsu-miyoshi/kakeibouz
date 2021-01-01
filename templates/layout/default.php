@@ -15,6 +15,7 @@
  */
 
 $cakeDescription = 'Kakeibouz';
+$loginUser = $this->request->getSession()->read('Auth');
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,13 +43,13 @@ $cakeDescription = 'Kakeibouz';
         <div class="top-nav-title">
             <a href="/payments"><span>今月の家計</span>簿</a>
         </div>
-        <?php if ($loginUsername): ?>
+        <?php if ($loginUser): ?>
         <div class="top-nav-links">
             <?= $this->Html->link(__('カテゴリ'), ['controller'=> 'cost_categories', 'action' => 'index']) ?>
             <?= $this->Html->link(__('支払先'), ['controller'=> 'stores', 'action' => 'index']) ?>
             <?= $this->Html->link(__('締め処理'), ['controller'=> 'settlements', 'action' => 'index']) ?>
             <?= $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) ?>
-            <?= $loginUsername ?>
+            <strong><?= $loginUser->code ?></strong>
         </div>
         <?php endif; ?>
     </nav>
