@@ -14,7 +14,7 @@
  * @var \App\View\AppView $this
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Kakeibouz';
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,10 +42,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-nav-title">
             <a href="/payments"><span>今月の家計</span>簿</a>
         </div>
+        <?php if ($loginUsername): ?>
         <div class="top-nav-links">
+            <?= $this->Html->link(__('締め処理'), ['controller'=> 'settlements', 'action' => 'index']) ?>
+            <?= $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) ?>
             <?= $loginUsername ?>
-            <?= $loginUsername ? $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) : null ?>
         </div>
+        <?php endif; ?>
     </nav>
     <main class="main">
         <div class="container">
