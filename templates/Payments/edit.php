@@ -39,10 +39,10 @@
                     echo $this->Form->control('payment_method_id', ['label' => __('💳支払方法'), 'type' => 'radio']);
                     echo $this->Form->control('cost_category_id', ['label' => __('🗂カテゴリ'), 'empty' => true]);
                     echo $this->Form->control('store_id', ['label' => __('🏬支払先'), 'empty' => true]);
-                    echo $this->Form->control('product_name', ['label' => __('🏷商品名')]);
+                    echo $this->Form->control('product_name', ['label' => __('🏷商品名'), 'inputmode'=> 'kana']);
                     echo $this->Form->control('payer_id', ['label' => __('👥立替人'), 'type' => 'radio']);
-                    echo $this->Form->control('amount', ['label' => __('💰支払金額'), 'default' => '']);
-                    echo $this->Form->control('private_amount', ['label' => __('除外金額'), 'default' => '']);
+                    echo $this->Form->control('amount', ['label' => __('💰支払金額'), 'default' => '', 'inputmode'=> 'numeric']);
+                    echo $this->Form->control('private_amount', ['label' => __('除外金額'), 'default' => '', 'inputmode'=> 'numeric']);
                     echo '🧾レシート';
                     echo $this->Form->file('_receipt_image');
                     //echo $this->Html->image($payment->receipt_file);
