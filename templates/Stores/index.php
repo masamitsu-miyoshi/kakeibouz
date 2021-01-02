@@ -5,8 +5,8 @@
  */
 ?>
 <div class="stores index content">
-    <?= $this->Html->link(__('New Store'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Stores') ?></h3>
+    <?= $this->Html->link(__('新規支払先'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <h3><?= __('支払先') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>

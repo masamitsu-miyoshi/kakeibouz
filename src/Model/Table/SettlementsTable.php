@@ -54,6 +54,7 @@ class SettlementsTable extends Table
 
         $this->hasMany('Payments', [
             'foreignKey' => 'settlement_id',
+            'sort' => ['Payments.date' => 'DESC', 'Payments.id' => 'DESC']
         ]);
     }
 

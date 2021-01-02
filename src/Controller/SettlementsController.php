@@ -3,8 +3,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\Time;
+use Laminas\Diactoros\CallbackStream;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 /**
  * Settlements Controller
@@ -55,6 +60,70 @@ class SettlementsController extends AppController
             $this->Flash->error(__('The settlement could not be saved. Please, try again.'));
         }
         $this->set(compact('settlement'));
+    }
+
+    public function download($id = null)
+    {
+        $settlement = $this->Settlements->get($id, [
+            'contain' => [
+                'Payments',
+                'Payments.PaymentMethods',
+                'Payments.CostCategories',
+                'Payments.Stores',
+                'Payments.PaidUsers',
+            ],
+        ]);
+
+        $spreadsheet = new Spreadsheet();
+        // 選択されているシートを取得
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setTitle($settlement->code);
+
+        // header
+        $sheet->fromArray([
+            [
+                'No',
+                'Date',
+                'Method',
+                'Category',
+                '内容',
+                '宛先',
+                '立替人',
+                '金額',
+            ],
+        ], null, 'A1');
+
+        // Body
+        $sheet->fromArray(collection($settlement->payments)->map(function ($payment, $index) {
+            return [
+                $index + 1,
+                $payment->date->i18nFormat('yyyy/MM/dd') ?? '',
+                $payment->payment_method->name ?? '',
+                $payment->cost_category->name ?? '',
+                $payment->product_name,
+                $payment->store->name ?? '',
+                $payment->paid_user->code,
+                $payment->amount - $payment->private_amount,
+            ];
+        })->toArray(), null, 'A2');
+
+        try {
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+
+            $stream = new CallbackStream(function () use ($writer) {
+                $writer->save('php://output');
+            });
+
+            // ファイルを出力
+            return $this->response
+                ->withHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                ->withHeader('Content-Disposition', "attachment;filename=\"$settlement->code.xlsx\"")
+                ->withHeader('Cache-Control', 'max-age=0')
+                ->withBody($stream);
+        } catch (Exception $e) {
+            throw new InternalErrorException($e);
+        }
     }
 
     /**

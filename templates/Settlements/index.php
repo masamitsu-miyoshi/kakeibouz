@@ -5,8 +5,8 @@
  */
 ?>
 <div class="settlements index content">
-    <?= $this->Html->link(__('New Settlement'), ['action' => 'create'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Settlements') ?></h3>
+    <?= $this->Html->link(__('月末締め処理'), ['action' => 'create'], ['class' => 'button float-right']) ?>
+    <h3><?= __('月末締め') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
@@ -14,7 +14,6 @@
                     <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('code') ?></th>
                     <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
@@ -24,10 +23,9 @@
                     <td><?= $this->Number->format($settlement->id) ?></td>
                     <td><?= h($settlement->code) ?></td>
                     <td><?= h($settlement->created) ?></td>
-                    <td><?= h($settlement->modified) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $settlement->id]) ?>
-                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $settlement->id], ['confirm' => __('Are you sure you want to delete # {0}?', $settlement->id)]) ?>
+                        <?= $this->Html->link(__('Download'), ['action' => 'download', $settlement->id]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -5,8 +5,8 @@
  */
 ?>
 <div class="costCategories index content">
-    <?= $this->Html->link(__('New Cost Category'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Cost Categories') ?></h3>
+    <?= $this->Html->link(__('新規カテゴリ'), ['action' => 'add'], ['class' => 'button float-right']) ?>
+    <h3><?= __('カテゴリ') ?></h3>
     <div class="table-responsive">
         <table>
             <thead>
