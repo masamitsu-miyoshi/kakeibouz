@@ -19,6 +19,12 @@ use PhpOffice\PhpSpreadsheet\Writer\Exception;
  */
 class SettlementsController extends AppController
 {
+    public $paginate = [
+        'order' => [
+            'Settlements.code' => 'desc',
+        ]
+    ];
+
     /**
      * Index method
      *

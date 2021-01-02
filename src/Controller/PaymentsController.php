@@ -19,7 +19,6 @@ use Cake\Utility\Inflector;
 class PaymentsController extends AppController
 {
     public $paginate = [
-//        'limit' => 10,
         'order' => [
             'Payments.date' => 'desc',
         ]
