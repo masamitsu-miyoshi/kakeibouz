@@ -5,7 +5,11 @@
  */
 ?>
 <div class="settlements view content">
-    <?= $this->Html->link(__('Delete'), ['action' => 'delete'], ['class' => 'button float-right']) ?>
+    <?= $this->Form->postLink(
+        __('Delete'),
+        ['action' => 'delete', $settlement->id],
+        ['confirm' => __('Are you sure you want to delete # {0}?', $settlement->code), 'class' => 'button float-right']
+    ) ?>
     <h3><?= h($settlement->id) ?></h3>
     <table>
         <tr>
