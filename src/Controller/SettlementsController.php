@@ -59,6 +59,8 @@ class SettlementsController extends AppController
         if ($this->request->is('post')) {
             $settlement = $this->Settlements->patchEntity($settlement, $this->request->getData());
 
+            $settlement->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->Settlements->save($settlement)) {
                 $this->Flash->success(__('The settlement has been saved.'));
                 return $this->redirect(['action' => 'index']);

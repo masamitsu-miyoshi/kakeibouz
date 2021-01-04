@@ -64,6 +64,13 @@ class PaymentsTable extends Table
             'foreignKey' => 'paid_user_id',
             'propertyName' => 'paid_user',
         ]);
+        $this->belongsTo('BilledUsers', [
+            'className' => 'Users',
+            'foreignKey' => 'billed_user_id',
+            'propertyName' => 'billed_user',
+        ]);
+
+        $this->belongsTo('Families');
     }
 
     /**

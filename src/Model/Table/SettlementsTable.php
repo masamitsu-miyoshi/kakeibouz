@@ -33,6 +33,8 @@ use Cake\Validation\Validator;
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  *
  * @property PaymentsTable $Payments
+ * @property BillsTable $Bills
+ * @property FamiliesTable $Families
  */
 class SettlementsTable extends Table
 {
@@ -52,10 +54,15 @@ class SettlementsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Families');
+
         $this->hasMany('Payments', [
             'foreignKey' => 'settlement_id',
             'sort' => ['Payments.date' => 'DESC', 'Payments.id' => 'DESC']
         ]);
+
+        $this->hasMany('Bills')
+            ->setDependent(true);
     }
 
     public function afterSave(Event $event, Settlement $entity, ArrayObject $options) {
@@ -63,11 +70,26 @@ class SettlementsTable extends Table
         $target->addMonth(1);
 
         // IDを一括Update
-        $query = $this->Payments->query();
-        $query->update()
+        $this->Payments->query()
+            ->update()
             ->set(['settlement_id' => $entity->id])
             ->where(['settlement_id IS NULL', 'date <' => $target->i18nFormat('yyyy-MM-dd')])
             ->execute();
+
+        // ユーザ単位で請求を一括INSERT
+        $select = $this->Payments->find()
+            ->leftJoinWith('Families.Users')
+            ->select(['Families.id', $entity->id, 'Payments.id', 'Users.id', 'Users.bill_rate'])
+            ->where(['Families.id' => $entity->family_id]);
+
+        $this->Bills->query()
+            ->insert(['family_id', 'settlement_id', 'payment_id', 'user_id', 'rate'])
+            ->values($select)
+            ->execute();
+
+        // 支払いに請求先ユーザが設定されている場合、按分率を調整する。
+
+        // 金額を掛け算で産出する
     }
 
     public function beforeDelete(Event $event, Settlement $entity, ArrayObject $options) {

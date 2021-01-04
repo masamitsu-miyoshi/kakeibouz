@@ -40,6 +40,8 @@ class UsersTable extends Table
         parent::initialize($config);
         $this->setDisplayField('code');
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Families');
     }
 
     /**

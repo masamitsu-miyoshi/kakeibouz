@@ -6,14 +6,21 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Settlement Entity
+ * Bill Entity
  *
  * @property int $id
- * @property string $code
+ * @property int|null $settlement_id
+ * @property int|null $payment_id
+ * @property int|null $user_id
+ * @property string|null $bill_rate
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ *
+ * @property \App\Model\Entity\Settlement $settlement
+ * @property \App\Model\Entity\Payment $payment
+ * @property \App\Model\Entity\User $user
  */
-class Settlement extends Entity
+class Bill extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -25,9 +32,14 @@ class Settlement extends Entity
      * @var array
      */
     protected $_accessible = [
-        'family_id' => true,
-        'code' => true,
+        'settlement_id' => true,
+        'payment_id' => true,
+        'user_id' => true,
+        'bill_rate' => true,
         'created' => true,
         'modified' => true,
+        'settlement' => true,
+        'payment' => true,
+        'user' => true,
     ];
 }
