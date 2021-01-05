@@ -74,11 +74,13 @@ class SettlementsController extends AppController
     {
         $settlement = $this->Settlements->get($id, [
             'contain' => [
+                'Families.Users',
                 'Payments',
                 'Payments.PaymentMethods',
                 'Payments.CostCategories',
                 'Payments.Stores',
                 'Payments.PaidUsers',
+                'Payments.Bills',
             ],
         ]);
 
@@ -90,30 +92,40 @@ class SettlementsController extends AppController
 
         // header
         $sheet->fromArray([
-            [
-                'No',
-                'Date',
-                'Method',
-                'Category',
-                '内容',
-                '宛先',
-                '立替人',
-                '金額',
-            ],
+            array_merge(
+                [
+                    'No',
+                    '支払日',
+                    '支払方法',
+                    '支払種別',
+                    '支払内容',
+                    '支払先',
+                    '支払人',
+                    '支払金額',
+                ],
+                collection($settlement->family->users)->reduce(function($accumulated, $user) {
+                    return array_merge($accumulated, ["$user->code.請求割合", "$user->code.請求金額"]);
+                }, [])
+            ),
         ], null, 'A1');
 
         // Body
         $sheet->fromArray(collection($settlement->payments)->map(function ($payment, $index) {
-            return [
-                $index + 1,
-                $payment->date->i18nFormat('yyyy/MM/dd') ?? '',
-                $payment->payment_method->name ?? '',
-                $payment->cost_category->name ?? '',
-                $payment->product_name,
-                $payment->store->name ?? '',
-                $payment->paid_user->code,
-                $payment->amount - $payment->private_amount,
-            ];
+            return array_merge(
+                [
+                    $index + 1,
+                    $payment->date->i18nFormat('yyyy/MM/dd') ?? '',
+                    $payment->payment_method->name ?? '',
+                    $payment->cost_category->name ?? '',
+                    $payment->product_name,
+                    $payment->store->name ?? '',
+                    $payment->paid_user->code,
+                    $payment->amount - $payment->private_amount,
+                ],
+                collection($payment->bills)->reduce(function($accumulated, $bill) {
+                    return array_merge($accumulated, [$bill->rate, $bill->amount]);
+                }, [])
+            );
         })->toArray(), null, 'A2');
 
         try {

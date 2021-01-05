@@ -46,6 +46,7 @@ class FamiliesTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('Users')
+            ->setSort(['Users.id' => 'ASC'])
             ->setDependent(true);
 
         $this->hasMany('Payments')

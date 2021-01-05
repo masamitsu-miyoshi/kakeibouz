@@ -71,6 +71,9 @@ class PaymentsTable extends Table
         ]);
 
         $this->belongsTo('Families');
+
+        $this->hasMany('Bills')
+            ->setSort(['Bills.user_id' => 'ASC']);
     }
 
     /**
