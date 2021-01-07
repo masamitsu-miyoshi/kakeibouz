@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\SettlementDetailsTable;
+use App\Model\Table\DebitsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\SettlementDetailsTable Test Case
+ * App\Model\Table\DebitsTable Test Case
  */
 class SettlementDetailsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\SettlementDetailsTable
+     * @var \App\Model\Table\DebitsTable
      */
     protected $SettlementDetails;
 
@@ -25,8 +25,6 @@ class SettlementDetailsTableTest extends TestCase
      */
     protected $fixtures = [
         'app.SettlementDetails',
-        'app.Settlements',
-        'app.Payments',
         'app.Users',
     ];
 
@@ -38,7 +36,7 @@ class SettlementDetailsTableTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('SettlementDetails') ? [] : ['className' => SettlementDetailsTable::class];
+        $config = $this->getTableLocator()->exists('SettlementDetails') ? [] : ['className' => DebitsTable::class];
         $this->SettlementDetails = $this->getTableLocator()->get('SettlementDetails', $config);
     }
 

@@ -35,6 +35,7 @@ use Cake\Validation\Validator;
  * @property PaymentsTable $Payments
  * @property BillsTable $Bills
  * @property FamiliesTable $Families
+ * @property DebitsTable $Debits
  */
 class SettlementsTable extends Table
 {
@@ -56,10 +57,12 @@ class SettlementsTable extends Table
 
         $this->belongsTo('Families');
 
-        $this->hasMany('Payments', [
-            'foreignKey' => 'settlement_id',
-            'sort' => ['Payments.date' => 'DESC', 'Payments.id' => 'DESC']
-        ]);
+        $this->hasMany('Payments')
+            ->setSort(['Payments.date' => 'DESC', 'Payments.id' => 'DESC']);
+
+        $this->hasMany('Debits')
+            ->setSort(['Debits.user_id' => 'ASC'])
+            ->setDependent(true);
 
         $this->hasMany('Bills')
             ->setDependent(true);
@@ -68,6 +71,10 @@ class SettlementsTable extends Table
     public function afterSave(Event $event, Settlement $entity, ArrayObject $options) {
         $target = Time::parse(substr($entity->code, 0, 4) . '-' . substr($entity->code, 4, 2) . '-01');
         $target->addMonth(1);
+
+        $family = $this->Families->get($entity->family_id, [
+                'contain' => ['Users']
+            ]);
 
         // 締め対象の支払いを一括Update
         $this->Payments->query()
@@ -100,39 +107,64 @@ class SettlementsTable extends Table
             ->values($select)
             ->execute();
 
-        // 支払った分、ユーザーごとにマイナスの請求を作成
-        $select = $this->Payments->find()
-            ->select([
-                'family_id',
-                $entity->id,
-                'paid_user_id',
-                1,
-                'paid_amount' => '-SUM(Payments.amount - Payments.private_amount)'
-            ])
-            ->group(['family_id', 'paid_user_id'])
-            ->where(['settlement_id' => $entity->id]);
+        // 請求金額を一括Update
         $this->Bills->query()
-            ->insert([
-                'family_id',
-                'settlement_id',
-                'user_id',
-                'rate',
-                'paid_amount'
-            ])
-            ->values($select)
+            ->update()
+            ->set(['amount = rate * paid_amount'])
+            ->where(['settlement_id' => $entity->id])
             ->execute();
+
+        // 請求済みを集計
+        $bills = $this->Bills->query()
+            ->select([
+                'user_id',
+                'bill_amount' => 'SUM(Bills.amount)',
+            ])
+            ->group(['user_id'])
+            ->where(['settlement_id' => $entity->id])
+            ->all()
+            ->combine('user_id', 'bill_amount')
+            ->toArray();
+
+
+        // 支払済みを集計
+        $payments = $this->Payments->find()
+            ->select([
+                'paid_user_id',
+                'paid_amount' => 'SUM(Payments.amount - Payments.private_amount)'
+            ])
+            ->group(['paid_user_id'])
+            ->where(['settlement_id' => $entity->id])
+            ->all()
+            ->combine('paid_user_id', 'paid_amount')
+            ->toArray();
+
+        foreach ($family->users as $user) {
+            // 債務を作成
+            $this->Debits->query()
+                ->insert([
+                    'settlement_id',
+                    'user_id',
+                    'billed_amount',
+                    'paid_amount',
+                    'amount',
+                ])
+                ->values([
+                    'settlement_id' => $entity->id,
+                    'user_id' => $user->id,
+                    'billed_amount' => $bills[$user->id] ?? 0,
+                    'paid_amount' => $payments[$user->id] ?? 0,
+                    'amount' => $bills[$user->id] - $payments[$user->id],
+                ])
+                ->execute();
+        }
+
 
         // 支払いに請求先ユーザが設定されている場合、按分率を調整する。
 //        $this->Payments->find()
 //            ->where(['Payments.settlement_id' => $entity->id, 'Payments.billed_user_id IS NOT NULL'])
 //            ->all();// eachで、payments.idから、処理する。
 
-        // 請求金額をUpdate
-        $this->Bills->query()
-            ->update()
-            ->set(['amount = rate * paid_amount'])
-            ->where(['settlement_id' => $entity->id])
-            ->execute();
     }
 
     public function beforeDelete(Event $event, Settlement $entity, ArrayObject $options) {

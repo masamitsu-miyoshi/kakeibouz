@@ -134,6 +134,8 @@ class PaymentsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $payment = $this->Payments->patchEntity($payment, $this->request->getData());
 
+            $payment->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->Payments->save($payment)) {
                 $this->Flash->success(__('保存に成功しました 伝票:{0} 金額:{1}', 'P' . $payment->id, $payment->amount - $payment->private_amount));
                 return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);

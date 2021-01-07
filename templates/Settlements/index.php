@@ -2,6 +2,7 @@
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Settlement[]|\Cake\Collection\CollectionInterface $settlements
+ * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
 ?>
 <div class="settlements index content">
@@ -11,8 +12,10 @@
         <table>
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
                     <th><?= $this->Paginator->sort('code') ?></th>
+                    <?php foreach ($users as $userId => $userCode):?>
+                        <th><?= $userCode ?></th>
+                    <?php endforeach; ?>
                     <th><?= $this->Paginator->sort('created') ?></th>
                     <th class="actions"><?= __('Actions') ?></th>
                 </tr>
@@ -20,8 +23,10 @@
             <tbody>
                 <?php foreach ($settlements as $settlement): ?>
                 <tr>
-                    <td><?= $this->Number->format($settlement->id) ?></td>
                     <td><?= h($settlement->code) ?></td>
+                    <?php foreach ($users as $userId => $userCode):?>
+                        <td><?= $this->Number->currency(collection($settlement->debits)->firstMatch(['user_id' => $userId])->amount) ?></td>
+                    <?php endforeach; ?>
                     <td><?= h($settlement->created) ?></td>
                     <td class="actions">
                         <?= $this->Html->link(__('View'), ['action' => 'view', $settlement->id]) ?>

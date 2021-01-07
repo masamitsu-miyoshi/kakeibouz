@@ -15,7 +15,7 @@
         <dl>
             <?php foreach ($totalPaymentsByPayer as $payerId => $totalPayment): ?>
             <dt><?= $this->Html->link($totalPayment->payer_name, ['year' => $dateFrom->i18nFormat('yyyy'), 'month' => $dateFrom->i18nFormat('MM'), '?' => ['payer_id' => $payerId]]) ?></dt>
-            <dd><?= $this->Number->format($totalPayment->payment_amount) ?></dd>
+            <dd><?= $this->Number->currency($totalPayment->payment_amount) ?></dd>
             <?php endforeach; ?>
         </dl>
     </div>
@@ -42,12 +42,12 @@
                     <td><?= h($payment->product_name) ?? '-' ?></td>
                     <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
                     <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
-                    <td><?= $this->Number->format($payment->amount - $payment->private_amount) ?></td>
+                    <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
                     <td class="actions"><?php
                         if (empty($payment->settlement_id)) {
                             echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
                         } else {
-                            echo 'P' . $payment->id . ' ✅';
+                            echo 'P' . h($payment->id) . ' ✅';
                         }
                         ?></td>
                 </tr>

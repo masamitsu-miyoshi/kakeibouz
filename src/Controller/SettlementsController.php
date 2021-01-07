@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Cake\Event\EventInterface;
 use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\Time;
+use Cake\Utility\Inflector;
 use Laminas\Diactoros\CallbackStream;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -20,10 +22,25 @@ use PhpOffice\PhpSpreadsheet\Writer\Exception;
 class SettlementsController extends AppController
 {
     public $paginate = [
+        'contain' => [
+            'Debits'
+        ],
         'order' => [
             'Settlements.code' => 'desc',
         ]
     ];
+
+    public function beforeFilter(EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        foreach (['Users'] as $modelName) {
+            $this->loadModel($modelName);
+            $this->$modelName->find();
+            $data = $this->$modelName->find('list')->order(['id'])->toArray();
+            $this->set(Inflector::variable($modelName), $data);
+        }
+    }
 
     /**
      * Index method
@@ -47,7 +64,10 @@ class SettlementsController extends AppController
     public function view($id = null)
     {
         $settlement = $this->Settlements->get($id, [
-            'contain' => ['Payments'],
+            'contain' => [
+                'Debits.Bills',
+                'Payments',
+            ],
         ]);
 
         $this->set(compact('settlement'));
@@ -93,6 +113,7 @@ class SettlementsController extends AppController
         // header
         $sheet->fromArray([
             array_merge(
+                // 支払列
                 [
                     'No',
                     '支払日',
@@ -103,6 +124,7 @@ class SettlementsController extends AppController
                     '支払人',
                     '支払金額',
                 ],
+                // 請求列
                 collection($settlement->family->users)->reduce(function($accumulated, $user) {
                     return array_merge($accumulated, ["$user->code.請求割合", "$user->code.請求金額"]);
                 }, [])
@@ -112,6 +134,7 @@ class SettlementsController extends AppController
         // Body
         $sheet->fromArray(collection($settlement->payments)->map(function ($payment, $index) {
             return array_merge(
+                // 支払列
                 [
                     $index + 1,
                     $payment->date->i18nFormat('yyyy/MM/dd') ?? '',
@@ -122,11 +145,17 @@ class SettlementsController extends AppController
                     $payment->paid_user->code,
                     $payment->amount - $payment->private_amount,
                 ],
+                // 請求列
                 collection($payment->bills)->reduce(function($accumulated, $bill) {
                     return array_merge($accumulated, [$bill->rate, $bill->amount]);
                 }, [])
             );
         })->toArray(), null, 'A2');
+
+        // Footer
+        $sheet->fromArray([
+            '最終行'
+        ], null, 'A' . ($sheet->getHighestRow() + 1));
 
         try {
             $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
