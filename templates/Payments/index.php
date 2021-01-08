@@ -44,7 +44,7 @@
                     <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
                     <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
                     <td class="actions"><?php
-                        if (empty($payment->settlement_id)) {
+                        if (empty($payment->book_id)) {
                             echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
                         } else {
                             echo 'P' . h($payment->id) . ' ✅';

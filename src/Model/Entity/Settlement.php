@@ -9,9 +9,13 @@ use Cake\ORM\Entity;
  * Settlement Entity
  *
  * @property int $id
- * @property string $code
+ * @property int|null $book_id
+ * @property int|null $user_id
+ * @property string $amount
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ *
+ * @property \App\Model\Entity\User $user
  */
 class Settlement extends Entity
 {
@@ -25,9 +29,11 @@ class Settlement extends Entity
      * @var array
      */
     protected $_accessible = [
-        'family_id' => true,
-        'code' => true,
+        'book_id' => true,
+        'user_id' => true,
+        'bill_amount' => true,
         'created' => true,
         'modified' => true,
+        'user' => true,
     ];
 }

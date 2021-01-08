@@ -11,7 +11,7 @@ use Cake\Validation\Validator;
 /**
  * Bills Model
  *
- * @property \App\Model\Table\SettlementsTable&\Cake\ORM\Association\BelongsTo $Settlements
+ * @property \App\Model\Table\BooksTable&\Cake\ORM\Association\BelongsTo $Books
  * @property \App\Model\Table\PaymentsTable&\Cake\ORM\Association\BelongsTo $Payments
  * @property \App\Model\Table\UsersTable&\Cake\ORM\Association\BelongsTo $Users
  *
@@ -43,21 +43,14 @@ class BillsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('bills');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Settlements', [
-            'foreignKey' => 'settlement_id',
-        ]);
-        $this->belongsTo('Payments', [
-            'foreignKey' => 'payment_id',
-        ]);
-        $this->belongsTo('Users', [
-            'foreignKey' => 'user_id',
-        ]);
+        $this->belongsTo('Books');
+        $this->belongsTo('Payments');
+        $this->belongsTo('Users');
     }
 
     /**
@@ -88,7 +81,7 @@ class BillsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->existsIn(['settlement_id'], 'Settlements'), ['errorField' => 'settlement_id']);
+        $rules->add($rules->existsIn(['book_id'], 'Books'), ['errorField' => 'book_id']);
         $rules->add($rules->existsIn(['payment_id'], 'Payments'), ['errorField' => 'payment_id']);
         $rules->add($rules->existsIn(['user_id'], 'Users'), ['errorField' => 'user_id']);
 

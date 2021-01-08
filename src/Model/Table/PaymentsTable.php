@@ -106,24 +106,24 @@ class PaymentsTable extends Table
         $rules->add($rules->existsIn('paid_user_id', 'PaidUsers'));
 
         $rules->addUpdate(function ($entity, $options) {
-            if (empty($entity->getOriginal('settlement_id'))) {
+            if (empty($entity->getOriginal('book_id'))) {
                 return true;
             } else {
                 return false;
             }
-        }, 'settlement_id', [
-            'errorField' => 'settlement_id',
+        }, 'book_id', [
+            'errorField' => 'book_id',
             'message' => '締めたレコードの更新禁止'
         ]);
 
         $rules->addDelete(function ($entity, $options) {
-            if (empty($entity->settlement_id)) {
+            if (empty($entity->book_id)) {
                 return true;
             } else {
                 return false;
             }
-        }, 'settlement_id', [
-            'errorField' => 'settlement_id',
+        }, 'book_id', [
+            'errorField' => 'book_id',
             'message' => '締めたレコードの更新禁止'
         ]);
 

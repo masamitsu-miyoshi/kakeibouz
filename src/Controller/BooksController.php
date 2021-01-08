@@ -14,19 +14,19 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 
 /**
- * Settlements Controller
+ * Books Controller
  *
- * @property \App\Model\Table\SettlementsTable $Settlements
- * @method \App\Model\Entity\Settlement[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Model\Table\BooksTable $Books
+ * @method \App\Model\Entity\Book[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class SettlementsController extends AppController
+class BooksController extends AppController
 {
     public $paginate = [
         'contain' => [
-            'Debits'
+            'Settlements'
         ],
         'order' => [
-            'Settlements.code' => 'desc',
+            'Books.code' => 'desc',
         ]
     ];
 
@@ -49,50 +49,50 @@ class SettlementsController extends AppController
      */
     public function index()
     {
-        $settlements = $this->paginate($this->Settlements);
+        $books = $this->paginate($this->Books);
 
-        $this->set(compact('settlements'));
+        $this->set(compact('books'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Settlement id.
+     * @param string|null $id Book id.
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $settlement = $this->Settlements->get($id, [
+        $book = $this->Books->get($id, [
             'contain' => [
-                'Debits.Bills',
+                'Settlements.Bills',
                 'Payments',
             ],
         ]);
 
-        $this->set(compact('settlement'));
+        $this->set(compact('book'));
     }
 
     public function create()
     {
-        $settlement = $this->Settlements->newEntity(['code' => FrozenTime::now('Asia/Tokyo')->subMonth(1)->i18nFormat('yyyyMM')]);
+        $book = $this->Books->newEntity(['code' => FrozenTime::now('Asia/Tokyo')->subMonth(1)->i18nFormat('yyyyMM')]);
         if ($this->request->is('post')) {
-            $settlement = $this->Settlements->patchEntity($settlement, $this->request->getData());
+            $book = $this->Books->patchEntity($book, $this->request->getData());
 
-            $settlement->family_id = $this->request->getSession()->read('Auth.family_id');
+            $book->family_id = $this->request->getSession()->read('Auth.family_id');
 
-            if ($this->Settlements->save($settlement)) {
-                $this->Flash->success(__('The settlement has been saved.'));
+            if ($this->Books->save($book)) {
+                $this->Flash->success(__('The book has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The settlement could not be saved. Please, try again.'));
+            $this->Flash->error(__('The book could not be saved. Please, try again.'));
         }
-        $this->set(compact('settlement'));
+        $this->set(compact('book'));
     }
 
     public function download($id = null)
     {
-        $settlement = $this->Settlements->get($id, [
+        $book = $this->Books->get($id, [
             'contain' => [
                 'Families.Users',
                 'Payments',
@@ -108,7 +108,7 @@ class SettlementsController extends AppController
         // 選択されているシートを取得
         $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setTitle($settlement->code);
+        $sheet->setTitle($book->code);
 
         // header
         $sheet->fromArray([
@@ -125,14 +125,14 @@ class SettlementsController extends AppController
                     '支払金額',
                 ],
                 // 請求列
-                collection($settlement->family->users)->reduce(function($accumulated, $user) {
+                collection($book->family->users)->reduce(function($accumulated, $user) {
                     return array_merge($accumulated, ["$user->code.請求割合", "$user->code.請求金額"]);
                 }, [])
             ),
         ], null, 'A1');
 
         // Body
-        $sheet->fromArray(collection($settlement->payments)->map(function ($payment, $index) {
+        $sheet->fromArray(collection($book->payments)->map(function ($payment, $index) {
             return array_merge(
                 // 支払列
                 [
@@ -167,7 +167,7 @@ class SettlementsController extends AppController
             // ファイルを出力
             return $this->response
                 ->withHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-                ->withHeader('Content-Disposition', "attachment;filename=\"$settlement->code.xlsx\"")
+                ->withHeader('Content-Disposition', "attachment;filename=\"$book->code.xlsx\"")
                 ->withHeader('Cache-Control', 'max-age=0')
                 ->withBody($stream);
         } catch (Exception $e) {
@@ -178,18 +178,18 @@ class SettlementsController extends AppController
     /**
      * Delete method
      *
-     * @param string|null $id Settlement id.
+     * @param string|null $id Book id.
      * @return \Cake\Http\Response|null|void Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $settlement = $this->Settlements->get($id);
-        if ($this->Settlements->delete($settlement)) {
-            $this->Flash->success(__('The settlement has been deleted.'));
+        $book = $this->Books->get($id);
+        if ($this->Books->delete($book)) {
+            $this->Flash->success(__('The book has been deleted.'));
         } else {
-            $this->Flash->error(__('The settlement could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The book could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);

@@ -52,7 +52,7 @@ class FamiliesTable extends Table
         $this->hasMany('Payments')
             ->setDependent(true);
 
-        $this->hasMany('Settlements')
+        $this->hasMany('Books')
             ->setDependent(true);
 
         $this->hasMany('Bills')

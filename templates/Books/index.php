@@ -1,11 +1,11 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Settlement[]|\Cake\Collection\CollectionInterface $settlements
+ * @var \App\Model\Entity\Book[]|\Cake\Collection\CollectionInterface $books
  * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
 ?>
-<div class="settlements index content">
+<div class="books index content">
     <?= $this->Html->link(__('月末締め処理'), ['action' => 'create'], ['class' => 'button float-right']) ?>
     <h3><?= __('月末締め') ?></h3>
     <div class="table-responsive">
@@ -21,16 +21,16 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($settlements as $settlement): ?>
+                <?php foreach ($books as $book): ?>
                 <tr>
-                    <td><?= h($settlement->code) ?></td>
+                    <td><?= h($book->code) ?></td>
                     <?php foreach ($users as $userId => $userCode):?>
-                        <td><?= $this->Number->currency(collection($settlement->debits)->firstMatch(['user_id' => $userId])->amount) ?></td>
+                        <td><?= $this->Number->currency(collection($book->settlements)->firstMatch(['user_id' => $userId])->amount) ?></td>
                     <?php endforeach; ?>
-                    <td><?= h($settlement->created) ?></td>
+                    <td><?= h($book->created) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $settlement->id]) ?>
-                        <?= $this->Html->link(__('Download'), ['action' => 'download', $settlement->id]) ?>
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $book->id]) ?>
+                        <?= $this->Html->link(__('Download'), ['action' => 'download', $book->id]) ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
