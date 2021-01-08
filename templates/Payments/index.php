@@ -26,9 +26,9 @@
                     <th>📅<span class="label"><?= __('日付') ?></span></th>
                     <th>💳<span class="label"><?= __('支払方法') ?></span></th>
                     <th>🗂<span class="label"><?= __('カテゴリ') ?></span></th>
-                    <th>🏷<span class="label"><?= __('商品名') ?></span></th>
+                    <th>🏷<span class="label"><?= __('支払内容') ?></span></th>
                     <th>🏬<span class="label"><?= __('支払先') ?></span></th>
-                    <th>👥<span class="label"><?= __('立替人') ?></span></th>
+                    <th>👥<span class="label"><?= __('支払人') ?></span></th>
                     <th>💰<span class="label"><?= __('金額') ?></span></th>
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>

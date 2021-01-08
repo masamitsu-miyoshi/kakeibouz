@@ -90,7 +90,7 @@ class BooksTable extends Table
                 $entity->id,
                 'Payments.id',
                 'Users.id',
-                'Users.bill_rate',
+                'bill_rate' => 'CASE WHEN Payments.billed_user_id = Users.id THEN 1 WHEN Payments.billed_user_id IS NOT NULL THEN 0 ELSE Users.bill_rate END',
                 'paid_amount' => 'Payments.amount - Payments.private_amount'
             ])
             ->where(['Payments.book_id' => $entity->id]);
