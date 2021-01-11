@@ -75,33 +75,6 @@ return [
             'path' => CACHE,
             'url' => env('REDIS_URL', null),
         ],
-
-        '_cake_core_' => [
-            'className' => RedisEngine::class,
-            'prefix' => 'myapp_cake_core_',
-            'path' => CACHE . 'persistent' . DS,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('REDIS_URL', null),
-        ],
-
-        '_cake_model_' => [
-            'className' => RedisEngine::class,
-            'prefix' => 'myapp_cake_model_',
-            'path' => CACHE . 'models' . DS,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('REDIS_URL', null),
-        ],
-
-        '_cake_routes_' => [
-            'className' => RedisEngine::class,
-            'prefix' => 'myapp_cake_routes_',
-            'path' => CACHE,
-            'serialize' => true,
-            'duration' => '+1 years',
-            'url' => env('REDIS_URL', null),
-        ],
     ],
 
     'Session' => [
