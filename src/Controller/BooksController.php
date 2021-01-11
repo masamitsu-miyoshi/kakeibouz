@@ -49,7 +49,8 @@ class BooksController extends AppController
      */
     public function index()
     {
-        $books = $this->paginate($this->Books);
+        $query = $this->Books->find()->where(['family_id'=> $this->request->getSession()->read('Auth.family_id')]);
+        $books = $this->paginate($query);
 
         $this->set(compact('books'));
     }
