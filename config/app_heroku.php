@@ -69,17 +69,17 @@ return [
     ],
 
     //Warning: Warning (512): The `redis` extension must be enabled to use RedisEngine. in [/app/vendor/cakephp/cakephp/src/Cache/Cache.php, line 161]
-    'Cache' => [
-        'redis' => [
-            'className' => RedisEngine::class,
-            'url' => env('REDIS_URL', null),
-        ],
-    ],
-
-    'Session' => [
-        'defaults' => 'cache',
-        'handler' => [
-            'config' => 'redis'
-        ],
-    ],
+//    'Cache' => [
+//        'redis' => [
+//            'className' => RedisEngine::class,
+//            'url' => env('REDIS_URL', null),
+//        ],
+//    ],
+//
+//    'Session' => [
+//        'defaults' => 'cache',
+//        'handler' => [
+//            'config' => 'redis'
+//        ],
+//    ],
 ];
