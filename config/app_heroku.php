@@ -5,6 +5,9 @@
  * Note: It is not recommended to commit files with credentials such as app_local.php
  * into source code version control.
  */
+
+use Cake\Cache\Engine\RedisEngine;
+
 return [
     /*
      * Debug Level:
@@ -66,16 +69,42 @@ return [
     ],
 
     //Warning: Warning (512): The `redis` extension must be enabled to use RedisEngine. in [/app/vendor/cakephp/cakephp/src/Cache/Cache.php, line 161]
-//    'Cache' => [
-//        'redis' => [
-//            'url' => env('REDIS_URL', null),
-//        ],
-//    ],
-//
-//    'Session' => [
-//        'defaults' => 'cache',
-//        'handler' => [
-//            'config' => 'redis'
-//        ],
-//    ],
+    'Cache' => [
+        'default' => [
+            'className' => RedisEngine::class,
+            'path' => CACHE,
+            'url' => env('REDIS_URL', null),
+        ],
+
+        '_cake_core_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_core_',
+            'path' => CACHE . 'persistent' . DS,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('REDIS_URL', null),
+        ],
+
+        '_cake_model_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_model_',
+            'path' => CACHE . 'models' . DS,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('REDIS_URL', null),
+        ],
+
+        '_cake_routes_' => [
+            'className' => RedisEngine::class,
+            'prefix' => 'myapp_cake_routes_',
+            'path' => CACHE,
+            'serialize' => true,
+            'duration' => '+1 years',
+            'url' => env('REDIS_URL', null),
+        ],
+    ],
+
+    'Session' => [
+        'defaults' => 'cache',
+    ],
 ];
