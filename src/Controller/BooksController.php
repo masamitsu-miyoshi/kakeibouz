@@ -65,8 +65,7 @@ class BooksController extends AppController
     {
         $book = $this->Books->get($id, [
             'contain' => [
-                'Settlements.Bills',
-                'Payments',
+                'Settlements.Bills.Payments',
             ],
         ]);
 
