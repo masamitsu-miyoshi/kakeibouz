@@ -36,10 +36,5 @@ class Bill extends Entity
         'payment_id' => true,
         'user_id' => true,
         'bill_rate' => true,
-        'created' => true,
-        'modified' => true,
-        'book' => true,
-        'payment' => true,
-        'user' => true,
     ];
 }

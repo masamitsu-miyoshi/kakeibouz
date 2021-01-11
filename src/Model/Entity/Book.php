@@ -27,7 +27,5 @@ class Book extends Entity
     protected $_accessible = [
         'family_id' => true,
         'code' => true,
-        'created' => true,
-        'modified' => true,
     ];
 }

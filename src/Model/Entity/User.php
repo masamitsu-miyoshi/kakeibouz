@@ -29,8 +29,6 @@ class User extends Entity
         'code' => true,
         'username' => true,
         'password' => true,
-        'created' => true,
-        'modified' => true,
     ];
 
     // Automatically hash passwords when they are changed.

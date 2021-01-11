@@ -32,8 +32,5 @@ class Settlement extends Entity
         'book_id' => true,
         'user_id' => true,
         'bill_amount' => true,
-        'created' => true,
-        'modified' => true,
-        'user' => true,
     ];
 }

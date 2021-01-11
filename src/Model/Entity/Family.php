@@ -28,8 +28,6 @@ class Family extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'created' => true,
-        'modified' => true,
         'users' => true,
     ];
 }
