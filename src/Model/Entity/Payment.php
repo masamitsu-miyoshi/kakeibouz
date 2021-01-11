@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * Payment Entity
  *
  * @property int $id
+ * @property int $family_id
  * @property \Cake\I18n\FrozenDate|null $date
  * @property string|null $payment_method_id
  * @property string|null $cost_category_id

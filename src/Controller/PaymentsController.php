@@ -58,6 +58,7 @@ class PaymentsController extends AppController
         );
         $dateTo = $dateFrom->addMonth(1);
         $query->where([
+            'Payments.family_id' => $this->request->getSession()->read('Auth.family_id'),
             'OR' => [
                 [
                     'Payments.date >=' => $dateFrom,
@@ -124,9 +125,9 @@ class PaymentsController extends AppController
                 'paid_user_id' => $this->request->getSession()->read('Auth.id'),
             ]);
         } else {
-            $payment = $this->Payments->get($id, [
-                'contain' => [],
-            ]);
+            $payment = $this->Payments->find()
+                ->where(['id' => $id, 'family_id' => $this->request->getSession()->read('Auth.family_id')])
+                ->firstOrFail();
         }
 
         $ref = $this->request->getQuery('ref');
@@ -147,22 +148,6 @@ class PaymentsController extends AppController
         $this->set(compact('payment'));
     }
 
-    public function duplicate($id = null)
-    {
-        $this->request->allowMethod(['post']);
-        $payment = $this->Payments->get($id);
-        $payment->setNew(true);
-        $payment->id = null;
-
-        if ($this->Payments->save($payment)) {
-            $this->Flash->success(__('保存に成功しました'));
-            return $this->redirect(['action' => 'edit', $payment->id]);
-        } else {
-            $this->Flash->error(__('The payment could not be saved. Please, try again.'));
-            return $this->redirect($this->referer());
-        }
-    }
-
     /**
      * Delete method
      *
@@ -173,7 +158,11 @@ class PaymentsController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $payment = $this->Payments->get($id);
+
+        $payment = $this->Payments->find()
+            ->where(['id' => $id, 'family_id' => $this->request->getSession()->read('Auth.family_id')])
+            ->firstOrFail();
+
         if ($this->Payments->delete($payment)) {
             $this->Flash->success(__('The payment has been deleted.'));
             return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
