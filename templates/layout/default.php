@@ -48,6 +48,7 @@ $loginUser = $this->request->getSession()->read('Auth');
             <?= $this->Html->link(__('カテゴリ'), ['controller'=> 'cost_categories', 'action' => 'index']) ?>
             <?= $this->Html->link(__('支払先'), ['controller'=> 'stores', 'action' => 'index']) ?>
             <?= $this->Html->link(__('月末締め'), ['controller'=> 'books', 'action' => 'index']) ?>
+            <?= $this->Html->link(__('支払集計'), ['controller'=> 'payments', 'action' => 'aggregate']) ?>
             <?= $this->Html->link(__('ログアウト'), ['controller'=> 'users', 'action' => 'logout']) ?>
             <strong><?= $loginUser->code ?></strong>
         </div>

@@ -110,6 +110,42 @@ class PaymentsController extends AppController
         $this->set(compact('payments'));
     }
 
+    public function aggregate()
+    {
+        $query = $this->Payments->find();
+
+        $begin = FrozenTime::now()->subYear();
+
+        $end = FrozenTime::now();
+
+        $query->select([
+            'payment_month' => "DATE_FORMAT(Payments.date, '%Y-%m')",
+            'Payments.cost_category_id',
+            'payment_amount' => 'SUM(Payments.amount - Payments.private_amount)'
+        ]);
+
+        $query->where([
+            'Payments.family_id' => $this->request->getSession()->read('Auth.family_id'),
+            'OR' => [
+                [
+                    'Payments.date >=' => $begin->i18nFormat('yyyy-MM-01'),
+                    'Payments.date <=' => $end->i18nFormat('yyyy-MM-dd'),
+                ],
+                [
+                    'Payments.date IS NULL',
+                ]
+            ]
+        ]);
+
+        $query->group([
+            'Payments.cost_category_id',
+            "DATE_FORMAT(Payments.date, '%Y-%m')"
+        ]);
+
+        $payments = $query->all();
+        $this->set(compact('payments'));
+    }
+
     /**
      * Edit method
      *
