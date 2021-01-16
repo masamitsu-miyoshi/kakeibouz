@@ -45,7 +45,7 @@ foreach ($aggregatedPayments as $paymentMonth => $payments) {
     </aside>
     <div class="column-responsive column-80">
         <div class="payments form content">
-            <div id="chart" style="width: 900px; height: 500px"></div>
+            <div id="chart" style="width: 800px; height: 500px"></div>
         </div>
     </div>
 </div>
