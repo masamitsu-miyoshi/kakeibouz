@@ -88,9 +88,6 @@ class PaymentsTable extends Table
             ->integer('id')
             ->allowEmptyString('id', null, 'create');
 
-        $validator
-            ->requirePresence('paid_user_id');
-
         return $validator;
     }
 
@@ -109,7 +106,7 @@ class PaymentsTable extends Table
             if (empty($entity->getOriginal('book_id'))) {
                 return true;
             } else {
-                return false;
+                return (0 === count(array_intersect(['amount', 'private_amount', 'book_id', 'paid_user_id', 'billed_user_id'], $entity->getDirty())));
             }
         }, 'book_id', [
             'errorField' => 'book_id',
@@ -124,7 +121,7 @@ class PaymentsTable extends Table
             }
         }, 'book_id', [
             'errorField' => 'book_id',
-            'message' => '締めたレコードの更新禁止'
+            'message' => '締めたレコードの削除禁止'
         ]);
 
         return $rules;

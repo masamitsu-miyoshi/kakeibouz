@@ -110,7 +110,7 @@ class PaymentsController extends AppController
         $this->set(compact('payments'));
     }
 
-    public function aggregate()
+    public function aggregate($costCategoryId = null)
     {
         $query = $this->Payments->find();
 
@@ -136,6 +136,10 @@ class PaymentsController extends AppController
                 ]
             ]
         ]);
+
+        if ($costCategoryId) {
+            $query->where(['Payments.cost_category_id' => $costCategoryId]);
+        }
 
         $query->group([
             'Payments.cost_category_id',
