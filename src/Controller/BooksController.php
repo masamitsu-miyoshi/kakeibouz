@@ -37,7 +37,11 @@ class BooksController extends AppController
         foreach (['Users'] as $modelName) {
             $this->loadModel($modelName);
             $this->$modelName->find();
-            $data = $this->$modelName->find('list')->order(['id'])->toArray();
+            $data = $this->$modelName
+                ->find('list')
+                ->where(['family_id' => $this->request->getSession()->read('Auth.family_id')])
+                ->order(['id'])
+                ->toArray();
             $this->set(Inflector::variable($modelName), $data);
         }
     }
