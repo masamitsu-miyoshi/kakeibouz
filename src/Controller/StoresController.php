@@ -18,7 +18,8 @@ class StoresController extends AppController
      */
     public function index()
     {
-        $stores = $this->paginate($this->Stores);
+        $query = $this->Stores->find()->where(['family_id'=> $this->request->getSession()->read('Auth.family_id')]);
+        $stores = $this->paginate($query);
 
         $this->set(compact('stores'));
     }
@@ -33,6 +34,9 @@ class StoresController extends AppController
         $store = $this->Stores->newEmptyEntity();
         if ($this->request->is('post')) {
             $store = $this->Stores->patchEntity($store, $this->request->getData());
+
+            $store->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->Stores->save($store)) {
                 $this->Flash->success(__('The store has been saved.'));
 
@@ -52,11 +56,17 @@ class StoresController extends AppController
      */
     public function edit($id = null)
     {
-        $store = $this->Stores->get($id, [
-            'contain' => [],
-        ]);
+        $store = $this->Stores->find()
+            ->where([
+              'id' => $id,
+               'family_id' => $this->request->getSession()->read('Auth.family_id')
+            ])
+            ->firstOrFail();
         if ($this->request->is(['patch', 'post', 'put'])) {
             $store = $this->Stores->patchEntity($store, $this->request->getData());
+
+            $store->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->Stores->save($store)) {
                 $this->Flash->success(__('The store has been saved.'));
 
@@ -77,7 +87,12 @@ class StoresController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $store = $this->Stores->get($id);
+        $store = $this->Stores->find()
+            ->where([
+                'id' => $id,
+                'family_id' => $this->request->getSession()->read('Auth.family_id')
+            ])
+            ->firstOrFail();
         if ($this->Stores->delete($store)) {
             $this->Flash->success(__('The store has been deleted.'));
         } else {

@@ -25,7 +25,7 @@ class Store extends Entity
      * @var array
      */
     protected $_accessible = [
+        'family_id' => true,
         'name' => true,
-        'payments' => true,
     ];
 }

@@ -33,10 +33,22 @@ class PaymentsController extends AppController
     {
         parent::beforeFilter($event);
 
-        foreach (['Users', 'PaymentMethods', 'CostCategories', 'Stores'] as $modelName) {
+        foreach (['Users', 'CostCategories', 'Stores'] as $modelName) {
             $this->loadModel($modelName);
             $this->$modelName->find();
-            $data = $this->$modelName->find('list')->order(['id'])->toArray();
+            $data = $this->$modelName->find('list')
+                ->where(['family_id' => $this->request->getSession()->read('Auth.family_id')])
+                ->order(['id'])
+                ->toArray();
+            $this->set(Inflector::variable($modelName), $data);
+        }
+
+        foreach (['PaymentMethods'] as $modelName) {
+            $this->loadModel($modelName);
+            $this->$modelName->find();
+            $data = $this->$modelName->find('list')
+                ->order(['id'])
+                ->toArray();
             $this->set(Inflector::variable($modelName), $data);
         }
     }
@@ -88,6 +100,7 @@ class PaymentsController extends AppController
             ])
             ->leftJoinWith('PaidUsers')
             ->where([
+                'Payments.family_id' => $this->request->getSession()->read('Auth.family_id'),
                 'OR' => [
                     [
                         'Payments.date >=' => $dateFrom,

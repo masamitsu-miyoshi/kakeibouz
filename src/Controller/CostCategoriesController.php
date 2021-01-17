@@ -19,7 +19,9 @@ class CostCategoriesController extends AppController
      */
     public function index()
     {
-        $costCategories = $this->paginate($this->CostCategories);
+        $query = $this->CostCategories->find()->where(['family_id'=> $this->request->getSession()->read('Auth.family_id')]);
+
+        $costCategories = $this->paginate($query);
 
         $this->set(compact('costCategories'));
     }
@@ -33,9 +35,12 @@ class CostCategoriesController extends AppController
      */
     public function view($id = null)
     {
-        $costCategory = $this->CostCategories->get($id, [
-            'contain' => [],
-        ]);
+        $costCategory = $this->CostCategories->find()
+            ->where([
+                'id' => $id,
+                'family_id' => $this->request->getSession()->read('Auth.family_id')
+            ])
+            ->firstOrFail();
 
         $this->set('costCategory', $costCategory);
     }
@@ -50,6 +55,9 @@ class CostCategoriesController extends AppController
         $costCategory = $this->CostCategories->newEmptyEntity();
         if ($this->request->is('post')) {
             $costCategory = $this->CostCategories->patchEntity($costCategory, $this->request->getData());
+
+            $costCategory->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->CostCategories->save($costCategory)) {
                 $this->Flash->success(__('The cost category has been saved.'));
 
@@ -69,11 +77,18 @@ class CostCategoriesController extends AppController
      */
     public function edit($id = null)
     {
-        $costCategory = $this->CostCategories->get($id, [
-            'contain' => [],
-        ]);
+        $costCategory = $this->CostCategories->find()
+            ->where([
+                'id' => $id,
+                'family_id' => $this->request->getSession()->read('Auth.family_id')
+            ])
+            ->firstOrFail();
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $costCategory = $this->CostCategories->patchEntity($costCategory, $this->request->getData());
+
+            $costCategory->family_id = $this->request->getSession()->read('Auth.family_id');
+
             if ($this->CostCategories->save($costCategory)) {
                 $this->Flash->success(__('The cost category has been saved.'));
 
@@ -94,7 +109,12 @@ class CostCategoriesController extends AppController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $costCategory = $this->CostCategories->get($id);
+        $costCategory = $this->CostCategories->find()
+            ->where([
+                'id' => $id,
+                'family_id' => $this->request->getSession()->read('Auth.family_id')
+            ])
+            ->firstOrFail();
         if ($this->CostCategories->delete($costCategory)) {
             $this->Flash->success(__('The cost category has been deleted.'));
         } else {
