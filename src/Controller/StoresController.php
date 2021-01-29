@@ -18,7 +18,10 @@ class StoresController extends AppController
      */
     public function index()
     {
-        $query = $this->Stores->find()->where(['family_id'=> $this->request->getSession()->read('Auth.family_id')]);
+        $query = $this->Stores->find()
+            ->where([
+                'family_id'=> $this->request->getSession()->read('Auth.family_id')
+            ]);
         $stores = $this->paginate($query);
 
         $this->set(compact('stores'));

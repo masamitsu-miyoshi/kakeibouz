@@ -33,23 +33,25 @@ class PaymentsController extends AppController
     {
         parent::beforeFilter($event);
 
-        foreach (['Users', 'CostCategories', 'Stores'] as $modelName) {
-            $this->loadModel($modelName);
-            $this->$modelName->find();
-            $data = $this->$modelName->find('list')
-                ->where(['family_id' => $this->request->getSession()->read('Auth.family_id')])
-                ->order(['id'])
-                ->toArray();
-            $this->set(Inflector::variable($modelName), $data);
-        }
+        if ($this->request->getSession()->read('Auth.family_id')) {
+            foreach (['Users', 'CostCategories', 'Stores'] as $modelName) {
+                $this->loadModel($modelName);
+                $this->$modelName->find();
+                $data = $this->$modelName->find('list')
+                    ->where(['family_id' => $this->request->getSession()->read('Auth.family_id')])
+                    ->order(['id'])
+                    ->toArray();
+                $this->set(Inflector::variable($modelName), $data);
+            }
 
-        foreach (['PaymentMethods'] as $modelName) {
-            $this->loadModel($modelName);
-            $this->$modelName->find();
-            $data = $this->$modelName->find('list')
-                ->order(['id'])
-                ->toArray();
-            $this->set(Inflector::variable($modelName), $data);
+            foreach (['PaymentMethods'] as $modelName) {
+                $this->loadModel($modelName);
+                $this->$modelName->find();
+                $data = $this->$modelName->find('list')
+                    ->order(['id'])
+                    ->toArray();
+                $this->set(Inflector::variable($modelName), $data);
+            }
         }
     }
 
