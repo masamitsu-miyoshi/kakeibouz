@@ -46,6 +46,7 @@
                         <tr>
                             <th><?= __('支払番号') ?></th>
                             <th><?= __('支払内容') ?></th>
+                            <th><?= __('支払日') ?></th>
                             <th><?= __('請求割合') ?></th>
                             <th><?= __('請求金額') ?></th>
                         </tr>
@@ -53,6 +54,7 @@
                             <tr>
                                 <td><?= $this->Html->link('P' . $bill->payment_id, ['controller' => 'payments', 'action' => 'edit', $bill->payment_id, '?' => ['ref' => $this->request->getUri()->getPath()]]) ?></td>
                                 <td><?= h($bill->payment->product_name) ?></td>
+                                <td><?= h($bill->payment->date) ?></td>
                                 <td><?= h($bill->rate) ?></td>
                                 <td><?= $this->Number->currency($bill->amount) ?></td>
                             </tr>
