@@ -54,7 +54,7 @@
                             <tr>
                                 <td><?= $this->Html->link('P' . $bill->payment_id, ['controller' => 'payments', 'action' => 'edit', $bill->payment_id, '?' => ['ref' => $this->request->getUri()->getPath()]]) ?></td>
                                 <td><?= h($bill->payment->product_name) ?></td>
-                                <td><?= h($bill->payment->date) ?></td>
+                                <td><?= h($bill->payment->date ? $bill->payment->date->i18nFormat('M/d') : '-') ?></td>
                                 <td><?= h($bill->rate) ?></td>
                                 <td><?= $this->Number->currency($bill->amount) ?></td>
                             </tr>
