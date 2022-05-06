@@ -13,6 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  * @var \App\View\AppView $this
  */
+use Cake\Core\Configure;
 
 $cakeDescription = 'Kakeibouz';
 $loginUser = $this->request->getSession()->read('Auth');
@@ -61,6 +62,7 @@ $loginUser = $this->request->getSession()->read('Auth');
         </div>
     </main>
     <footer>
+        <?= Configure::version() ?>
     </footer>
 </body>
 </html>
