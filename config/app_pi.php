@@ -46,7 +46,7 @@ return [
             /**
              * You can use a DSN string to set the entire configuration
              */
-            'url' => env('MARIADB_DATABASE_URL', null),
+            'url' => env('DATABASE_URL', null),
         ],
     ],
 
