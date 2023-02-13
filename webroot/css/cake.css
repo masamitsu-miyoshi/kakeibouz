@@ -188,3 +188,7 @@ th {
 .sum dt::after{
     content: "："
 }
+
+.important {
+    background-color: yellow
+}

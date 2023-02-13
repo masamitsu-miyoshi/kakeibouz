@@ -51,7 +51,7 @@ class SettlementsTable extends Table
         $this->hasMany('Bills')
             ->setForeignKey(['book_id', 'user_id'])
             ->setBindingKey(['book_id', 'user_id'])
-            ->setSort(['Bills.rate' => 'DESC', 'Bills.amount' => 'DESC', 'Bills.id' => 'ASC']);
+            ->setSort(['Bills.amount' => 'DESC', 'Bills.id' => 'ASC']);
 
         $this->hasMany('Payments')
             ->setForeignKey(['book_id', 'user_id'])
