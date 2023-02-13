@@ -88,7 +88,7 @@ class PaymentsController extends AppController
             $query->where(['Payments.paid_user_id' =>  $this->request->getQuery('paid_user_id')]);
         }
 
-        $query->order(['date desc', 'id desc']);
+        $query->order(['date desc', 'amount desc', 'id desc']);
 
         $payments = $query->all();
 
