@@ -10,7 +10,7 @@
         <?= $this->Html->link(__('Next') . '👉', '/payments/' . $dateFrom->addMonth(1)->i18nFormat('yyyy/MM'), ['class' => 'float-right']) ?>
     </div>
     <h3 style="text-align: center;"><?= $this->Html->link($dateFrom->i18nFormat(' yyyy-MM'), ['year' => $dateFrom->i18nFormat('yyyy'), 'month' => $dateFrom->i18nFormat('MM')]) ?></h3>
-    <?= $this->Html->link(__('新規支払'), ['action' => 'edit', '?' => ['ref' => $this->request->getUri()->getPath()]], ['class' => 'button float-right']) ?>
+    <?= $this->Html->link(__('新規支払'), ['action' => 'edit', '?' => ['ref' => $this->request->getUri()->getPath(), 'date'  => $dateFrom->i18nFormat(' yyyy/MM/01')]], ['class' => 'button float-right']) ?>
     <div class="sum">
         <dl>
             <?php foreach ($totalPaymentsByPayer as $payerId => $totalPayment): ?>
