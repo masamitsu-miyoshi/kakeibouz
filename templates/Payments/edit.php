@@ -6,7 +6,7 @@
 ?>
 <div class="payments form content">
     <div>
-        <?= $this->Html->link(__('戻る'), $ref ?? '/payments/') ?>
+        <?= $this->Html->link('👈' . __('戻る'), $ref ?? '/payments/') ?>
     </div>
     <?= $payment->id ? $this->Form->postLink(
         __('削除'),
@@ -14,15 +14,15 @@
         ['confirm' => __('削除しますか？ # {0}?', $payment->id), 'class' => 'button float-right']
     ) : '' ?>
     <div>
-        <?= $this->Form->create($payment) ?>
-        <fieldset>
-            <legend><?php
+    <h3 style="text-align: center;"><?php
                 if ($payment->id) {
                     echo __('編集 {0}',  'P' . $payment->id);
                 } else {
                     echo __('新規');
                 }
-                ?></legend>
+                ?></h3>
+        <?= $this->Form->create($payment) ?>
+        <fieldset>
             <?php
                 echo $this->Form->control('date', ['label' => __('📅支払日'), 'empty' => true]);
                 echo $this->Form->control('payment_method_id', ['label' => __('💳支払方法'), 'type' => 'radio']);
