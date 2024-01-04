@@ -16,9 +16,9 @@
     <div>
     <h3 style="text-align: center;"><?php
                 if ($payment->id) {
-                    echo __('編集 {0}',  'P' . $payment->id);
+                    echo __('支払 {0}',  'P' . $payment->id);
                 } else {
-                    echo __('新規');
+                    echo __('支払 新規');
                 }
                 ?></h3>
         <?= $this->Form->create($payment) ?>
