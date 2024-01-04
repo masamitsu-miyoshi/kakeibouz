@@ -4,20 +4,15 @@
  * @var \App\Model\Entity\Payment $payment
  */
 ?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('戻る'), $ref ?? '/payments/', ['class' => 'side-nav-item']) ?>
-            <?= $this->Form->postLink(
+        <div class="payments form content">
+            <div>
+                <?= $this->Html->link(__('戻る'), $ref ?? '/payments/', ['class' => 'float-left']) ?>
+            </div>
+            <?= $payment->id ? $this->Form->postLink(
                 __('削除'),
                 ['action' => 'delete', $payment->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $payment->id), 'class' => 'side-nav-item']
-            ) ?>
-        </div>
-    </aside>
-    <div class="column-responsive column-80">
-        <div class="payments form content">
+                ['confirm' => __('削除しますか？ # {0}?', $payment->id), 'class' => 'button float-right']
+            ) : '' ?>
             <?= $this->Form->create($payment) ?>
             <fieldset>
                 <legend><?php
@@ -42,5 +37,3 @@
             <?= $this->Form->button(__('save')) ?>
             <?= $this->Form->end() ?>
         </div>
-    </div>
-</div>
