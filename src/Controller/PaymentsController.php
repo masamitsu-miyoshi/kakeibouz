@@ -176,7 +176,7 @@ class PaymentsController extends AppController
     {
         if ($id == null) {
             $payment = $this->Payments->newEntity([
-                'date' => FrozenTime::now('Asia/Tokyo'),
+                'date' => new FrozenTime( $this->request->getQuery('date') ?? 'now', 'Asia/Tokyo'),
                 'paid_user_id' => $this->request->getSession()->read('Auth.id'),
             ]);
         } else {
