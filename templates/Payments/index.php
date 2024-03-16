@@ -28,8 +28,8 @@
                     <th>🗂<span class="label"><?= __('カテゴリ') ?></span></th>
                     <th>🏷<span class="label"><?= __('支払内容') ?></span></th>
                     <th>🏬<span class="label"><?= __('支払先') ?></span></th>
-                    <th>👥<span class="label"><?= __('支払人') ?></span></th>
                     <th>💰<span class="label"><?= __('金額') ?></span></th>
+                    <th>👥<span class="label"><?= __('支払人') ?></span></th>
                     <th>👤<span class="label"><?= __('請求宛') ?></span></th>
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
@@ -42,8 +42,8 @@
                     <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                     <td><?= h($payment->product_name) ?? '-' ?></td>
                     <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
-                    <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
                     <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
+                    <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
                     <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
                     <td class="actions"><?php
                         echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
