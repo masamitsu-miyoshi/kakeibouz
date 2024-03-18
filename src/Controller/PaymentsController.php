@@ -194,7 +194,7 @@ class PaymentsController extends AppController
             $payment->family_id = $this->request->getSession()->read('Auth.family_id');
 
             if ($this->Payments->save($payment)) {
-                $this->Flash->success(__('保存に成功しました 伝票:P{0} {1} {2}', $payment->id, $payment->date->i18nFormat('yy/MM'), Number::currency($payment->amount - $payment->private_amount)));
+                $this->Flash->success(__('保存に成功しました 伝票:P{0} {1} {2}', $payment->id, $payment->date->i18nFormat('M/d'), Number::currency($payment->amount - $payment->private_amount)));
                 return $this->redirect(['controller' => 'payments', 'year' => $payment->date->i18nFormat('yyyy'), 'month' => $payment->date->i18nFormat('MM')]);
             }
 
