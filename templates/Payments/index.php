@@ -3,6 +3,10 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
+
+$paymentsByDate = $payments->groupBy('date');
+
+debug($paymentsByDate);
 ?>
 <div class="payments index content">
     <div>
@@ -34,9 +38,9 @@
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-            <?php foreach ($payments->groupBy('date') as $date => $paymentsByDate): ?>
+            <?php foreach ($paymentsByDate as $date => $payments): ?>
                 <tbody class="<?= $date->i18nFormat('eee') ?>">
-                    <?php foreach ($paymentsByDate as $payment): ?>
+                    <?php foreach ($payments as $payment): ?>
                     <tr>
                         <td rowspan="<?= $paymentsByDate->count() ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
                         <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
