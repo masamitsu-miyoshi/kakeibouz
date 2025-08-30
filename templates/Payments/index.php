@@ -34,8 +34,8 @@
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-            <?php foreach ($payments->groupBy('date') as $paymentsByDate): ?>
-                <tbody>
+            <?php foreach ($payments->groupBy('date') as $date => $paymentsByDate): ?>
+                <tbody class="<?= $date->i18nFormat('eee') ?>">
                     <?php foreach ($paymentsByDate as $payment): ?>
                     <tr>
                         <td rowspan="<?= $paymentsByDate->count() ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
