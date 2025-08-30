@@ -37,7 +37,7 @@
             <tbody>
                 <?php foreach ($payments as $payment): ?>
                 <tr>
-                    <td><?= h($payment->date ? $payment->date->i18nFormat('M/d') : '-') ?></td>
+                    <td><?= h($payment->date ? $payment->date->i18nFormat('M/d (eee)') : '-') ?></td>
                     <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                     <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                     <td><?= h($payment->product_name) ?? '-' ?></td>
