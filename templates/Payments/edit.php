@@ -33,6 +33,7 @@
         <div>
             <?= $this->Form->button(__('保存する')) ?>
         </div>
+        <?= $this->Form->end() ?>
         <?php if($payment->id && empty($payment->book_id)): ?>
         <div>
             <?= $this->Form->postLink(
@@ -42,6 +43,5 @@
             ) ?>
         </div>
         <?php endif; ?>
-        <?= $this->Form->end() ?>
     </div>
 </div>
