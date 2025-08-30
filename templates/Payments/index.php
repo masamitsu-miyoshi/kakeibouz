@@ -49,7 +49,7 @@ endwhile;
             </thead>
                 <?php foreach ($daysInMonth as $date): ?>
                 <tbody class="<?= $date ?>">
-                    <?php $records = $paymentsByDate->extract($date); ?>
+                    <?php $records = $paymentsByDate[$date]; ?>
                     <?php if (empty($records)): ?>
                         <tr>
                             <td><?= $date ?></td>
@@ -57,24 +57,11 @@ endwhile;
                             <td><?php var_dump($records); ?> </td>
                         </tr>
                     <?php else: ?>
-                    <?php foreach ($records as $index => $payment): ?>
-                    <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
-                        <?php if ($index === 0): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
-                        <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
-                        <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
-                        <td><?= h($payment->product_name) ?? '-' ?></td>
-                        <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
-                        <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
-                        <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
-                        <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
-                        <td class="actions"><?php
-                            echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                            if ($payment->book_id) {
-                                echo ' ' . $this->Html->link('✅', ['controller' => 'books', 'action' => 'view', $payment->book_id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                            }
-                            ?></td>
-                    </tr>
-                    <?php endforeach; ?>
+                        <tr>
+                            <td><?= $date ?></td>
+                            <td>YES</td>
+                            <td><?php var_dump($records); ?> </td>
+                        </tr>
                     <?php endif; ?>
                 </tbody>
                 <?php endforeach; ?>
