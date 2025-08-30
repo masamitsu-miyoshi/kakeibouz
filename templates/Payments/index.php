@@ -9,7 +9,12 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
     return $payment->date ? $payment->date->i18nFormat('yyyy-MM-dd') : '0000-00-00';
 });
 
-var_dump($paymentsByDate);
+foreach ($paymentsByDate as $date => $payments) {
+    echo "Date: $date, Total Amount: " . number_format($totalAmount) . "\n";
+    
+    var_dump($payments);
+}
+
 
 ?>
 <div class="payments index content">
