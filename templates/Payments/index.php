@@ -53,7 +53,7 @@ var_dump($daysInMonth);
                 <?php $records = $paymentsByDate->filter(function ($payments, $date) use ($dayInMonth) {
                     return $date === $dayInMonth;
                 }) ?? []; var_dump($records); ?>
-                <tbody class="<?= $date ?>">
+                <tbody class="<?= $dayInMonth ?>">
                     <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
                         <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
@@ -75,7 +75,7 @@ var_dump($daysInMonth);
                     <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="9"><?= $date ?></td>
+                            <td colspan="9"><?= $dayInMonth ?></td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
