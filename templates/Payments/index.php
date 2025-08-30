@@ -49,7 +49,7 @@ endwhile;
             </thead>
                 <?php foreach ($daysInMonth as $date): ?>
                 <tbody class="<?= $date ?>">
-                    <?php $records = $paymentsByDate->get($date); ?>
+                    <?php $records = $paymentsByDate->extract($date); ?>
                     <?php if (empty($records)): ?>
                         <tr>
                             <td><?= $date ?></td>
