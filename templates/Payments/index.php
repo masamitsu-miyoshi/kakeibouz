@@ -6,8 +6,8 @@ use Cake\Collection\Collection;
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
 
-$paymentsByDate = (new Collection($payments))->groupBy(function ($payment) {
-    return $payment->date; // Group by 'date' field
+$paymentsByDate = $payments->groupBy(function ($payment) {
+    return $payment->date->i18nFormat('M/d(eee)'); // Group by 'date' field
 });
 
 var_dump($paymentsByDate);
