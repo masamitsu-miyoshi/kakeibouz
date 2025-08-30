@@ -9,9 +9,10 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
     return $payment->date ? $payment->date->i18nFormat('yyyy-MM-dd') : '0000-00-00';
 });
 
+$daysInMonth = [];
 $date = $dateFrom;
 while ($date < $dateTo):
-    echo "現在の値: $date <br>";
+    $daysInMonth[] = $date->i18nFormat('yyyy-MM-dd');
     $date = $date->addDay();
 endwhile;
 
@@ -46,6 +47,21 @@ endwhile;
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
+                <?php foreach ($daysInMonth as $date): ?>
+                <tbody class="<?= $date ?>">
+                    <tr>
+                    <?php $records = $paymentsByDate->extract($date); ?>
+                    <?php if (isset($records)): ?>
+                        <td><?= $date ?></td>
+                        <td>AA</td>
+                    <?php else: ?>
+                        <td><?= $date ?></td>
+                        <td>N/A</td>
+                    <?php endif; ?>
+                    </tr>
+                </tbody>
+                <?php endforeach; ?>
+                
                 <?php foreach ($paymentsByDate as $date => $records): ?>
                 <tbody class="<?= $date ?>">
                     <?php foreach ($records as $index => $payment): ?>
