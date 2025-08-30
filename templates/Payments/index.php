@@ -51,7 +51,7 @@ endwhile;
                     <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
                         <tr class="<?= $index ?>">
-                            <?php if ($index === 1): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
+                            <?php if ($records->first() == $payment): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
                             <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                             <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                             <td><?= h($payment->product_name) ?? '-' ?></td>
