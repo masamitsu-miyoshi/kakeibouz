@@ -6,7 +6,7 @@
  */
 
 $paymentsByDate = $payments->groupBy(function ($payment) {
-    return $payment->date->i18nFormat('M/d(eee)'); // Group by 'date' field
+    return '123'; // Group by 'date' field
 });
 
 var_dump($paymentsByDate);
