@@ -34,26 +34,28 @@
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($payments as $payment): ?>
-                <tr>
-                    <td><?= h($payment->date ? $payment->date->i18nFormat('M/d (eee)') : '-') ?></td>
-                    <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
-                    <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
-                    <td><?= h($payment->product_name) ?? '-' ?></td>
-                    <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
-                    <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
-                    <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
-                    <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
-                    <td class="actions"><?php
-                        echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                        if ($payment->book_id) {
-                            echo ' ' . $this->Html->link('✅', ['controller' => 'books', 'action' => 'view', $payment->book_id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                        }
-                        ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
+            <?php foreach ($payments->groupBy('date') as $paymentsByDate): ?>
+                <tbody>
+                    <?php foreach ($paymentsByDate as $payment): ?>
+                    <tr>
+                        <td rowspan="<?= $paymentsByDate->count() ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
+                        <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
+                        <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
+                        <td><?= h($payment->product_name) ?? '-' ?></td>
+                        <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
+                        <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
+                        <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
+                        <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
+                        <td class="actions"><?php
+                            echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
+                            if ($payment->book_id) {
+                                echo ' ' . $this->Html->link('✅', ['controller' => 'books', 'action' => 'view', $payment->book_id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
+                            }
+                            ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            <?php endforeach; ?>
         </table>
     </div>
 </div>
