@@ -52,7 +52,7 @@ var_dump($daysInMonth);
             <?php foreach ($daysInMonth as $dayInMonth): ?>
                 <?php $records = $paymentsByDate->filter(function ($payments, $date) use ($dayInMonth) {
                     return $date === $dayInMonth;
-                }) ?? []; ?>
+                }) ?? []; var_dump($records); ?>
                 <tbody class="<?= $date ?>">
                     <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
