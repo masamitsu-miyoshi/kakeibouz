@@ -47,27 +47,10 @@ endwhile;
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-                <?php foreach ($daysInMonth as $date): ?>
-                <tbody class="<?= $date ?>">
-                    <?php $records = $paymentsByDate[$date]; ?>
-                    <?php if (empty($records)): ?>
-                        <tr>
-                            <td><?= $date ?></td>
-                            <td>empty</td>
-                            <td><?php var_dump($records); ?> </td>
-                        </tr>
-                    <?php else: ?>
-                        <tr>
-                            <td><?= $date ?></td>
-                            <td>YES</td>
-                            <td><?php var_dump($records); ?> </td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-                <?php endforeach; ?>
-                
+                <?php foreach ($daysInMonth as $dayInMonth): ?>
                 <?php foreach ($paymentsByDate as $date => $records): ?>
                 <tbody class="<?= $date ?>">
+                    <?php if ($date == $dayInMonth): ?>
                     <?php foreach ($records as $index => $payment): ?>
                     <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
                         <?php if ($index === 0): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
@@ -86,7 +69,13 @@ endwhile;
                             ?></td>
                     </tr>
                     <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="9"><?= $date ?></td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
+                <?php endforeach; ?>
                 <?php endforeach; ?>
         </table>
     </div>
