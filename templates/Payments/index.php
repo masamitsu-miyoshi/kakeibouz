@@ -50,9 +50,9 @@ var_dump($daysInMonth);
                 </tr>
             </thead>
             <?php foreach ($daysInMonth as $dayInMonth): ?>
-                <?php $records = $paymentsByDate->filter(function ($payments, $date) use ($dayInMonth) {
-                    return $date === $dayInMonth;
-                })->toArray() ?? []; ?>
+                <?php $records = $payments->filter(function ($payment) use ($dayInMonth) {
+                    return $payment->date->i18nFormat('yyyy-MM-dd') === $dayInMonth;
+                }) ?? []; ?>
                 <tbody class="<?= $dayInMonth ?>">
                     <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
