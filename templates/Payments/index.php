@@ -50,7 +50,7 @@ endwhile;
                 <tbody class="<?= $dayInMonth ?>">
                     <tr>
                     <?php if (!$records->isEmpty()): ?>
-                        <td rowspan="<?= $records->count() ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
+                        <td rowspan="<?= $records->count() ?>"><?= $dayInMonth ?></td>
                     <?php foreach ($records as $index => $payment): ?>
                         <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                         <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
