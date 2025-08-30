@@ -5,6 +5,11 @@
  */
 
 $paymentsByDate = $payments->groupBy('date')->toArray();
+
+
+var_dump($payments);
+
+var_dump($paymentsByDate);
 ?>
 <div class="payments index content">
     <div>
