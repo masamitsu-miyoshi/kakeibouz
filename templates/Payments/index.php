@@ -49,16 +49,20 @@ endwhile;
             </thead>
                 <?php foreach ($daysInMonth as $date): ?>
                 <tbody class="<?= $date ?>">
-                    <tr>
                     <?php $records = $paymentsByDate->extract($date); ?>
-                    <?php if (isset($records)): ?>
-                        <td><?= $date ?></td>
-                        <td>AA</td>
+                    <?php if (empty($records)): ?>
+                        <tr>
+                            <td><?= $date ?></td>
+                            <td>empty</td>
+                            <td><?php var_dump($records); ?> </td>
+                        </tr>
                     <?php else: ?>
-                        <td><?= $date ?></td>
-                        <td>N/A</td>
+                        <tr>
+                            <td><?= $date ?></td>
+                            <td>YES</td>
+                            <td><?php var_dump($records); ?> </td>
+                        </tr>
                     <?php endif; ?>
-                    </tr>
                 </tbody>
                 <?php endforeach; ?>
                 
