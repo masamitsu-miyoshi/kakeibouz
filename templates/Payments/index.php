@@ -9,13 +9,6 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
     return $payment->date ? $payment->date->i18nFormat('yyyy-MM-dd') : '0000-00-00';
 });
 
-foreach ($paymentsByDate as $date => $payments) {
-    echo "Date: $date, Total Amount: " . number_format($totalAmount) . "\n";
-    
-    var_dump($payments);
-}
-
-
 ?>
 <div class="payments index content">
     <div>
@@ -47,8 +40,9 @@ foreach ($paymentsByDate as $date => $payments) {
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
+                <?php foreach ($paymentsByDate as $date -> $records): ?>
                 <tbody class="<?= $date ?>">
-                    <?php foreach ($payments as $payment): ?>
+                    <?php foreach ($records as $payment): ?>
                     <tr>
                         <td><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
                         <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
@@ -67,6 +61,7 @@ foreach ($paymentsByDate as $date => $payments) {
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
+                <?php endforeach; ?>
         </table>
     </div>
 </div>
