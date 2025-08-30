@@ -17,7 +17,6 @@ while ($date < $dateTo):
     $date = $date->addDay();
 endwhile;
 
-var_dump($daysInMonth);
 ?>
 <div class="payments index content">
     <div>
@@ -52,12 +51,12 @@ var_dump($daysInMonth);
             <?php foreach ($daysInMonth as $dayInMonth): ?>
                 <?php $records = $payments->filter(function ($payment) use ($dayInMonth) {
                     return $payment->date->i18nFormat('yyyy-MM-dd') === $dayInMonth;
-                }) ?? []; ?>
+                }); ?>
                 <tbody class="<?= $dayInMonth ?>">
                     <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
                         <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
-                            <?php if ($index === 0): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
+                            <?php if ($index === 1): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
                             <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                             <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                             <td><?= h($payment->product_name) ?? '-' ?></td>
