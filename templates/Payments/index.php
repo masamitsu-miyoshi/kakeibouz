@@ -40,7 +40,7 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-                <?php foreach ($paymentsByDate as $date -> $records): ?>
+                <?php foreach ($paymentsByDate as $date => $records): ?>
                 <tbody class="<?= $date ?>">
                     <?php foreach ($records as $payment): ?>
                     <tr>
