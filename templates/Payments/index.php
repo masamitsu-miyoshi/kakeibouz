@@ -1,10 +1,12 @@
 <?php
+use Cake\Collection\Collection;
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
 
-$paymentsByDate = $payments->groupBy(function ($payment) {
+$paymentsByDate = (new Collection($payments))->groupBy(function ($payment) {
     return $payment->date; // Group by 'date' field
 });
 
