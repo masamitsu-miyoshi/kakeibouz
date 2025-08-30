@@ -48,9 +48,11 @@ endwhile;
                 </tr>
             </thead>
                 <?php foreach ($daysInMonth as $dayInMonth): ?>
-                <?php foreach ($paymentsByDate as $date => $records): ?>
-                <?php if ($date == $dayInMonth): ?>
+                <?php $records = $paymentsByDate->filter(function ($payments, $date) use ($dayInMonth) {
+                    return $date === $dayInMonth;
+                }) ?? []; ?>
                 <tbody class="<?= $date ?>">
+                    <?php if (!$records->isEmpty()): ?>
                     <?php foreach ($records as $index => $payment): ?>
                     <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
                         <?php if ($index === 0): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
@@ -73,9 +75,8 @@ endwhile;
                         <tr>
                             <td colspan="9"><?= $date ?></td>
                         </tr>
+                    <?php endif; ?>
                 </tbody>
-                <?php endif; ?>
-                <?php endforeach; ?>
                 <?php endforeach; ?>
         </table>
     </div>
