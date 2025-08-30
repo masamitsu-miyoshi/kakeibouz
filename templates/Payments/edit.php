@@ -8,11 +8,6 @@
     <div>
         <?= $this->Html->link('👈' . __('戻る'), $ref ?? '/payments/') ?>
     </div>
-    <?= $payment->id ? $this->Form->postLink(
-        __('削除'),
-        ['action' => 'delete', $payment->id],
-        ['confirm' => __('削除しますか？ # {0}?', $payment->id), 'class' => 'button float-right']
-    ) : '' ?>
     <div>
     <h3 style="text-align: center;"><?php
                 if ($payment->id) {
@@ -35,7 +30,18 @@
                 echo $this->Form->control('billed_user_id', ['label' => __('👤請求宛'), 'options' => $users, 'empty' => __('ALL'), 'disabled' => !empty($payment->book_id)]);
             ?>
         </fieldset>
-        <?= $this->Form->button(__('save')) ?>
+        <div>
+            <?= $this->Form->button(__('保存する')) ?>
+        </div>
+        <?php if($payment->id && empty($payment->book_id)): ?>
+        <div>
+            <?= $this->Form->postLink(
+                __('削除する'),
+                ['action' => 'delete', $payment->id],
+                ['confirm' => __('削除しますか？ # {0}?', $payment->id), 'class' => '']
+            ) ?>
+        </div>
+        <?php endif; ?>
         <?= $this->Form->end() ?>
     </div>
 </div>
