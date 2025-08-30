@@ -5,6 +5,12 @@
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
 
+$paymentsByDate = $payments->groupBy(function ($payment) {
+    return $payment->date ? $payment->date->i18nFormat('yyyy-MM-dd') : '0000-00-00';
+});
+
+var_dump($paymentsByDate);
+
 ?>
 <div class="payments index content">
     <div>
