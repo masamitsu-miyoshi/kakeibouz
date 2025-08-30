@@ -48,30 +48,30 @@ endwhile;
                     return $payment->date->i18nFormat('yyyy-MM-dd') === $dayInMonth;
                 }); ?>
                 <tbody class="<?= $dayInMonth ?>">
+                    <tr>
                     <?php if (!$records->isEmpty()): ?>
+                        <td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
                     <?php foreach ($records as $index => $payment): ?>
-                        <tr class="<?= $index ?>">
-                            <?php if ($records->first() == $payment): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
-                            <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
-                            <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
-                            <td><?= h($payment->product_name) ?? '-' ?></td>
-                            <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
-                            <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
-                            <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
-                            <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
-                            <td class="actions"><?php
-                                echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                                if ($payment->book_id) {
-                                    echo ' ' . $this->Html->link('✅', ['controller' => 'books', 'action' => 'view', $payment->book_id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
-                                }
-                                ?></td>
+                        <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
+                        <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
+                        <td><?= h($payment->product_name) ?? '-' ?></td>
+                        <td><?= h($stores[$payment->store_id] ?? '-') ?></td>
+                        <td><?= $this->Number->currency($payment->amount - $payment->private_amount) ?></td>
+                        <td><?= h($users[$payment->paid_user_id] ?? '-') ?></td>
+                        <td><?= h($users[$payment->billed_user_id] ?? __('ALL')) ?></td>
+                        <td class="actions"><?php
+                            echo $this->Html->link('P' . $payment->id, ['action' => 'edit', $payment->id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
+                            if ($payment->book_id) {
+                                echo ' ' . $this->Html->link('✅', ['controller' => 'books', 'action' => 'view', $payment->book_id, '?' => ['ref' => $this->request->getUri()->getPath()]]);
+                            }
+                            ?></td>
                         </tr>
+                        <tr>
                     <?php endforeach; ?>
                     <?php else: ?>
-                        <tr>
-                            <td colspan="9"><?= $dayInMonth ?></td>
-                        </tr>
+                        <td colspan="9"><?= $dayInMonth ?></td>
                     <?php endif; ?>
+                    </tr>
                 </tbody>
             <?php endforeach; ?>
         </table>
