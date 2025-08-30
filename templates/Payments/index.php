@@ -5,11 +5,6 @@
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
 
-$paymentsByDate = $payments->groupBy(function ($payment) {
-    return '123'; // Group by 'date' field
-});
-
-var_dump($paymentsByDate);
 ?>
 <div class="payments index content">
     <div>
@@ -41,7 +36,6 @@ var_dump($paymentsByDate);
                     <th class="actions">✏<span class="label"><?= __('編集') ?></span></th>
                 </tr>
             </thead>
-            <?php foreach ($paymentsByDate as $date => $payments): ?>
                 <tbody class="<?= $date ?>">
                     <?php foreach ($payments as $payment): ?>
                     <tr>
@@ -62,7 +56,6 @@ var_dump($paymentsByDate);
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
-            <?php endforeach; ?>
         </table>
     </div>
 </div>
