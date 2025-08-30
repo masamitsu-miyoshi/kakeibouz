@@ -44,7 +44,7 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
                 <tbody class="<?= $date ?>">
                     <?php foreach ($records as $index => $payment): ?>
                     <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
-                        <td><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
+                        <?php if ($index === 0): ?><td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td><?php endif; ?>
                         <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                         <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
                         <td><?= h($payment->product_name) ?? '-' ?></td>
