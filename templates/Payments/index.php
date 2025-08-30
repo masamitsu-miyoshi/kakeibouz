@@ -4,10 +4,9 @@
  * @var \App\Model\Entity\Payment[]|\Cake\Collection\CollectionInterface $payments
  */
 
-$paymentsByDate = $payments->groupBy('date')->toArray();
-
-
-var_dump($payments);
+$paymentsByDate = $payments->groupBy(function ($payment) {
+    return $payment->date; // Group by 'date' field
+})->toArray();
 
 var_dump($paymentsByDate);
 ?>
