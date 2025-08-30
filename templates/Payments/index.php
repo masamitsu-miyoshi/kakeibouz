@@ -1,5 +1,4 @@
 <?php
-use Cake\Collection\Collection;
 
 /**
  * @var \App\View\AppView $this
@@ -43,7 +42,7 @@ var_dump($paymentsByDate);
                 </tr>
             </thead>
             <?php foreach ($paymentsByDate as $date => $payments): ?>
-                <tbody class="<?= $date->i18nFormat('eee') ?>">
+                <tbody class="<?= $date ?>">
                     <?php foreach ($payments as $payment): ?>
                     <tr>
                         <td rowspan="<?= count($payments) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
