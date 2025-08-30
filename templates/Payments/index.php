@@ -7,7 +7,7 @@
 $daysInMonth = [];
 $date = $dateFrom;
 while ($date < $dateTo):
-    $daysInMonth[] = $date->i18nFormat('yyyy-MM-dd');
+    $daysInMonth[] = $date->i18nFormat('M/d(eee)');
 
     $date = $date->addDay();
 endwhile;
@@ -45,12 +45,12 @@ endwhile;
             </thead>
             <?php foreach ($daysInMonth as $dayInMonth): ?>
                 <?php $records = $payments->filter(function ($payment) use ($dayInMonth) {
-                    return $payment->date->i18nFormat('yyyy-MM-dd') === $dayInMonth;
+                    return $payment->date->i18nFormat('M/d(eee)') === $dayInMonth;
                 }); ?>
                 <tbody class="<?= $dayInMonth ?>">
                     <tr>
                     <?php if (!$records->isEmpty()): ?>
-                        <td rowspan="<?= count($records) ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
+                        <td rowspan="<?= $records->count() ?>"><?= h($payment->date ? $payment->date->i18nFormat('M/d(eee)') : '-') ?></td>
                     <?php foreach ($records as $index => $payment): ?>
                         <td><?= h($paymentMethods[$payment->payment_method_id] ?? '-') ?></td>
                         <td><?= h($costCategories[$payment->cost_category_id] ?? '-') ?></td>
