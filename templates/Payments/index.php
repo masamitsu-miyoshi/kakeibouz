@@ -9,6 +9,12 @@ $paymentsByDate = $payments->groupBy(function ($payment) {
     return $payment->date ? $payment->date->i18nFormat('yyyy-MM-dd') : '0000-00-00';
 });
 
+$date = $dateFrom;
+while ($date < $dateTo):
+    echo "現在の値: $date <br>";
+    $date = $date->addDay();
+endwhile;
+
 ?>
 <div class="payments index content">
     <div>

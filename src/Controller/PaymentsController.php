@@ -123,6 +123,7 @@ class PaymentsController extends AppController
 
         $this->set(compact('totalPaymentsByPayer'));
         $this->set(compact('dateFrom'));
+        $this->set(compact('dateTo'));
         $this->set(compact('payments'));
     }
 
