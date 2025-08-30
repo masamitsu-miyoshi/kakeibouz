@@ -69,7 +69,8 @@ endwhile;
                         <tr>
                     <?php endforeach; ?>
                     <?php else: ?>
-                        <td colspan="9"><?= $dayInMonth ?></td>
+                        <td colspan="8"><?= $dayInMonth ?></td>
+                        <td><?= __('なし') ?></td>
                     <?php endif; ?>
                     </tr>
                 </tbody>
