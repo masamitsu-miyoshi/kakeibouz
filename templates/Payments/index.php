@@ -6,7 +6,7 @@
 
 $paymentsByDate = $payments->groupBy(function ($payment) {
     return $payment->date; // Group by 'date' field
-})->toArray();
+});
 
 var_dump($paymentsByDate);
 ?>
